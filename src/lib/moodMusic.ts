@@ -173,13 +173,14 @@ export class MoodMusicEngine {
     return convolver;
   }
 
-  play(mood: Mood) {
+  play(mood: Mood, language?: Language) {
     if (this.isPlaying) this.stop();
 
     const ctx = this.getCtx();
     if (ctx.state === 'suspended') ctx.resume();
 
     const config = moodConfigs[mood];
+    const langConfig = language ? languageConfigs[language] : null;
     this.currentMood = mood;
     this.isPlaying = true;
 
