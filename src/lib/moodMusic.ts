@@ -2,6 +2,25 @@
 // Generates ambient soundscapes without external dependencies
 
 type Mood = 'sad' | 'calm' | 'joyful' | 'energetic' | 'anxious' | 'sleepy';
+type Language = 'english' | 'hindi' | 'tamil' | 'telugu' | 'spanish' | 'french' | 'korean' | 'japanese';
+
+interface LanguageConfig {
+  label: string;
+  scale: number[];
+  baseFreq: number;
+  ornament: 'none' | 'gamaka' | 'vibrato' | 'trill' | 'slide';
+}
+
+export const languageConfigs: Record<Language, LanguageConfig> = {
+  english: { label: 'English', scale: [0, 2, 4, 5, 7, 9, 11, 12], baseFreq: 261, ornament: 'none' },
+  hindi: { label: 'Hindi', scale: [0, 2, 4, 5, 7, 9, 10, 12], baseFreq: 240, ornament: 'gamaka' },
+  tamil: { label: 'Tamil', scale: [0, 1, 5, 7, 8, 12], baseFreq: 220, ornament: 'gamaka' },
+  telugu: { label: 'Telugu', scale: [0, 2, 3, 5, 7, 8, 10, 12], baseFreq: 230, ornament: 'gamaka' },
+  spanish: { label: 'Spanish', scale: [0, 2, 3, 5, 7, 8, 11, 12], baseFreq: 246, ornament: 'vibrato' },
+  french: { label: 'French', scale: [0, 2, 4, 6, 7, 9, 11, 12], baseFreq: 261, ornament: 'vibrato' },
+  korean: { label: 'Korean', scale: [0, 3, 5, 7, 10, 12], baseFreq: 196, ornament: 'slide' },
+  japanese: { label: 'Japanese', scale: [0, 1, 5, 7, 8, 12], baseFreq: 220, ornament: 'trill' },
+};
 
 interface MoodConfig {
   label: string;
