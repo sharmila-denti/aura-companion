@@ -8,7 +8,6 @@ import { getGenderSpecificTips } from '@/lib/notifications';
 import { getGamificationState } from '@/lib/gamification';
 import MetricCard from '@/components/MetricCard';
 import BottomNav from '@/components/BottomNav';
-import AnimatedAvatar from '@/components/AnimatedAvatar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
