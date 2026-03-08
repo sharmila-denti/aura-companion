@@ -42,6 +42,7 @@ function AppContent() {
         <Route path="/cycle" element={<CycleTracker />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/notifications" element={<NotificationSettings />} />
+        <Route path="/mood-music" element={<MoodMusic />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
