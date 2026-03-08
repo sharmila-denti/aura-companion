@@ -55,7 +55,7 @@ export default function MoodMusic() {
       engine.stop();
       setIsPlaying(false);
     } else {
-      engine.play(activeMood);
+      engine.play(activeMood, selectedLang);
       engine.setVolume(isMuted ? 0 : volume / 100);
       setIsPlaying(true);
     }
