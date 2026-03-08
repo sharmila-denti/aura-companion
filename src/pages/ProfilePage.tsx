@@ -25,7 +25,7 @@ export default function ProfilePage() {
     const p = getProfile();
     if (!p) { navigate('/'); return; }
     setProfile(p);
-    setAvatarStyle((p as any).avatarStyle ?? 0);
+    
   }, [navigate]);
 
   if (!profile) return null;
