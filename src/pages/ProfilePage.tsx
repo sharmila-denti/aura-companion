@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ProfileEditForm from '@/components/ProfileEditForm';
+import { useSubscription } from '@/hooks/useSubscription';
 
 
 
@@ -19,6 +20,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<UserProfile | null>(null);
+  const { subscribed, plan } = useSubscription();
   
 
   useEffect(() => {
@@ -151,7 +153,7 @@ export default function ProfilePage() {
           <div className="flex-1">
             <p className="text-sm font-semibold text-foreground">Subscription Plan</p>
             <p className="text-xs text-muted-foreground">
-              {localStorage.getItem('heyme_subscribed') === 'true' ? 'Active' : 'Upgrade to Premium'}
+              {subscribed && plan !== 'free_trial' ? 'Active' : 'Upgrade to Premium'}
             </p>
           </div>
           <span className="text-xs font-medium text-primary">→</span>

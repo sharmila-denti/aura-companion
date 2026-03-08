@@ -3,18 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { lovable } from '@/integrations/lovable/index';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
 import heyMeLogo from '@/assets/heyme-logo.png';
 
 export default function Login() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const { subscribed, loading: subLoading } = useSubscription();
 
   useEffect(() => {
-    if (!loading && user) {
-      const subscribed = localStorage.getItem('heyme_subscribed');
+    if (!loading && !subLoading && user) {
       navigate(subscribed ? '/dashboard' : '/subscription');
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, subLoading, subscribed, navigate]);
 
   const handleGoogleLogin = async () => {
     const { error } = await lovable.auth.signInWithOAuth('google', {
@@ -23,7 +24,7 @@ export default function Login() {
     if (error) console.error('Login error:', error);
   };
 
-  if (loading) {
+  if (loading || subLoading) {
     return (
       <div className="min-h-screen gradient-soft flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
