@@ -8,7 +8,6 @@ import { getGenderSpecificTips } from '@/lib/notifications';
 import { getGamificationState } from '@/lib/gamification';
 import MetricCard from '@/components/MetricCard';
 import BottomNav from '@/components/BottomNav';
-import AnimatedAvatar from '@/components/AnimatedAvatar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -60,25 +59,8 @@ export default function Dashboard() {
             <p className="text-primary-foreground/80 text-sm">Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'},</p>
             <h1 className="text-2xl font-bold font-display text-primary-foreground mt-0.5">{profile.name} ✨</h1>
           </div>
-          <button onClick={() => navigate('/profile')} className="shrink-0">
-            <AnimatedAvatar
-              name={profile.name}
-              gender={profile.gender}
-              skinTone={profile.skinTone}
-              hairTexture={profile.hairTexture}
-              hairDensity={profile.hairDensity}
-              eyeColor={profile.eyeColor}
-              eyeSize={profile.eyeSize}
-              hairColor={profile.hairColor}
-              hairLength={profile.hairLength}
-              lipStyle={profile.lipStyle}
-              lipColor={profile.lipColor}
-              dressStyle={profile.dressStyle}
-              size={48}
-              avatarStyle={(profile as any).avatarStyle ?? 0}
-              level={gamification.level}
-              className="ring-2 ring-primary-foreground/30"
-            />
+          <button onClick={() => navigate('/profile')} className="shrink-0 w-12 h-12 rounded-full gradient-warm flex items-center justify-center text-primary-foreground font-bold text-lg ring-2 ring-primary-foreground/30">
+            {profile.name.charAt(0).toUpperCase()}
           </button>
         </motion.div>
 

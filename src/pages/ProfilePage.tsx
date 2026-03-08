@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
-import AnimatedAvatar from '@/components/AnimatedAvatar';
 import { getProfile, saveProfile, clearAllData } from '@/lib/store';
-import { getGamificationState } from '@/lib/gamification';
 import { calculateBMI, UserProfile } from '@/lib/types';
 import { applyGenderTheme } from '@/lib/theme';
 import { Button } from '@/components/ui/button';
@@ -14,20 +12,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ProfileEditForm from '@/components/ProfileEditForm';
 
-const AVATAR_STYLE_COUNT = 5;
+
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<UserProfile | null>(null);
-  const [avatarStyle, setAvatarStyle] = useState(0);
+  
 
   useEffect(() => {
     const p = getProfile();
     if (!p) { navigate('/'); return; }
     setProfile(p);
-    setAvatarStyle((p as any).avatarStyle ?? 0);
+    
   }, [navigate]);
 
   if (!profile) return null;
@@ -45,12 +43,12 @@ export default function ProfilePage() {
   const cancelEdit = () => {
     setDraft(null);
     setEditing(false);
-    setAvatarStyle((profile as any).avatarStyle ?? 0);
+    
   };
 
   const saveEdit = () => {
     if (!draft) return;
-    const updated = { ...draft, avatarStyle } as any;
+    const updated = { ...draft };
     saveProfile(updated);
     setProfile(updated);
     applyGenderTheme();
@@ -71,9 +69,6 @@ export default function ProfilePage() {
     }
   };
 
-  const cycleAvatar = (dir: 1 | -1) => {
-    setAvatarStyle(prev => (prev + dir + AVATAR_STYLE_COUNT) % AVATAR_STYLE_COUNT);
-  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -97,37 +92,9 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Avatar */}
-          <div className="relative mx-auto mb-3 w-fit">
-            <AnimatedAvatar
-              name={current.name}
-              gender={current.gender}
-              skinTone={current.skinTone}
-              hairTexture={current.hairTexture}
-              hairDensity={current.hairDensity}
-              eyeColor={current.eyeColor}
-              eyeSize={current.eyeSize}
-              hairColor={current.hairColor}
-              hairLength={current.hairLength}
-              lipStyle={current.lipStyle}
-              lipColor={current.lipColor}
-              dressStyle={current.dressStyle}
-              size={80}
-              avatarStyle={avatarStyle}
-              level={getGamificationState().level}
-              className="ring-4 ring-primary-foreground/20"
-            />
-            {editing && (
-              <div className="flex items-center justify-center gap-3 mt-2">
-                <button onClick={() => cycleAvatar(-1)} className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <ChevronLeft size={14} />
-                </button>
-                <span className="text-xs opacity-70">Style {avatarStyle + 1}/{AVATAR_STYLE_COUNT}</span>
-                <button onClick={() => cycleAvatar(1)} className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-            )}
+          {/* Name Initial */}
+          <div className="w-16 h-16 rounded-full bg-primary-foreground/20 flex items-center justify-center mx-auto mb-3">
+            <span className="text-2xl font-bold">{current.name.charAt(0).toUpperCase()}</span>
           </div>
 
           {editing ? (

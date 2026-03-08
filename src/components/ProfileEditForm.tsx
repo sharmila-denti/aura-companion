@@ -123,17 +123,6 @@ export default function ProfileEditForm({ draft, update, onSave }: ProfileEditFo
       <OptionGroup label="Hair Density" options={['thin', 'medium', 'thick'] as const} value={draft.hairDensity} onChange={v => update({ hairDensity: v })} />
       <OptionGroup label="Hair Type" options={['oily', 'dry', 'normal', 'combination'] as const} value={draft.hairType} onChange={v => update({ hairType: v })} />
 
-      {/* Avatar Customization */}
-      <div className="space-y-1">
-        <p className="text-sm font-bold font-display text-foreground px-1">✨ Avatar Customization</p>
-      </div>
-      <OptionGroup label="Eye Color" options={['black', 'brown', 'hazel', 'green', 'blue', 'gray'] as const} value={draft.eyeColor} onChange={v => update({ eyeColor: v })} colorSwatches={EYE_SWATCHES} />
-      <OptionGroup label="Eye Size" options={['small', 'medium', 'large'] as const} value={draft.eyeSize} onChange={v => update({ eyeSize: v })} />
-      <OptionGroup label="Hair Color" options={['black', 'dark-brown', 'brown', 'auburn', 'blonde', 'red', 'gray', 'white'] as const} value={draft.hairColor} onChange={v => update({ hairColor: v })} colorSwatches={HAIR_SWATCHES} />
-      <OptionGroup label="Hair Length" options={['short', 'medium', 'long'] as const} value={draft.hairLength} onChange={v => update({ hairLength: v })} />
-      <OptionGroup label="Lip Style" options={['thin', 'medium', 'full'] as const} value={draft.lipStyle} onChange={v => update({ lipStyle: v })} />
-      <OptionGroup label="Lip Color" options={['natural', 'pink', 'red', 'berry', 'nude'] as const} value={draft.lipColor} onChange={v => update({ lipColor: v })} colorSwatches={LIP_SWATCHES} />
-      <OptionGroup label="Dress Style" options={['modern', 'traditional', 'casual', 'formal', 'sporty'] as const} value={draft.dressStyle} onChange={v => update({ dressStyle: v })} />
 
       {/* Language */}
       <OptionGroup label="Preferred Language (Music)" options={['english', 'hindi', 'tamil', 'telugu', 'spanish', 'french', 'korean', 'japanese'] as const} value={draft.language} onChange={v => update({ language: v })} />
