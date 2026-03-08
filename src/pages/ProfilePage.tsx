@@ -105,6 +105,13 @@ export default function ProfilePage() {
               skinTone={current.skinTone}
               hairTexture={current.hairTexture}
               hairDensity={current.hairDensity}
+              eyeColor={current.eyeColor}
+              eyeSize={current.eyeSize}
+              hairColor={current.hairColor}
+              hairLength={current.hairLength}
+              lipStyle={current.lipStyle}
+              lipColor={current.lipColor}
+              dressStyle={current.dressStyle}
               size={80}
               avatarStyle={avatarStyle}
               level={getGamificationState().level}
