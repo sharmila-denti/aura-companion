@@ -56,6 +56,19 @@ export default function QRScanner() {
   };
 
   const isUrl = result?.startsWith('http://') || result?.startsWith('https://');
+  const isHttps = result?.startsWith('https://');
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleOpenUrl = () => {
+    setShowConfirm(true);
+  };
+
+  const confirmOpen = () => {
+    if (result) {
+      window.open(result, '_blank', 'noopener,noreferrer');
+    }
+    setShowConfirm(false);
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -110,16 +123,50 @@ export default function QRScanner() {
                 <X size={18} />
               </button>
             </div>
-            <p className="text-sm text-muted-foreground break-all mb-3">{result}</p>
+            {isUrl && !isHttps && (
+              <div className="flex items-center gap-1.5 mb-2 px-2 py-1 rounded-lg bg-destructive/10 text-destructive text-xs font-medium">
+                ⚠️ Insecure link (HTTP)
+              </div>
+            )}
+            {isUrl && (
+              <div className="flex items-center gap-1.5 mb-2 px-2 py-1 rounded-lg bg-accent/10 text-accent text-xs font-medium">
+                <ExternalLink size={12} /> External Link — inspect URL before opening
+              </div>
+            )}
+            <p className="text-sm text-muted-foreground break-all mb-3 font-mono">{result}</p>
             <div className="flex gap-2">
               <button onClick={copyResult} className="flex-1 h-10 rounded-xl bg-secondary flex items-center justify-center gap-2 text-sm font-medium text-foreground">
                 <Copy size={16} /> Copy
               </button>
               {isUrl && (
-                <a href={result} target="_blank" rel="noopener noreferrer" className="flex-1 h-10 rounded-xl gradient-warm flex items-center justify-center gap-2 text-sm font-medium text-primary-foreground">
+                <button onClick={handleOpenUrl} className="flex-1 h-10 rounded-xl gradient-warm flex items-center justify-center gap-2 text-sm font-medium text-primary-foreground">
                   <ExternalLink size={16} /> Open
-                </a>
+                </button>
               )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Confirmation dialog */}
+        {showConfirm && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="glass-card rounded-2xl p-5 border border-accent/30"
+          >
+            <h3 className="font-bold font-display text-foreground mb-2">Open External Link?</h3>
+            <p className="text-xs text-muted-foreground mb-1">You are about to leave the app and visit:</p>
+            <p className="text-sm text-foreground break-all font-mono bg-secondary p-2 rounded-lg mb-3">{result}</p>
+            {!isHttps && (
+              <p className="text-xs text-destructive mb-3">⚠️ This is not a secure (HTTPS) link.</p>
+            )}
+            <div className="flex gap-2">
+              <button onClick={() => setShowConfirm(false)} className="flex-1 h-10 rounded-xl bg-secondary flex items-center justify-center text-sm font-medium text-foreground">
+                Cancel
+              </button>
+              <button onClick={confirmOpen} className="flex-1 h-10 rounded-xl gradient-warm flex items-center justify-center text-sm font-medium text-primary-foreground">
+                Continue
+              </button>
             </div>
           </motion.div>
         )}

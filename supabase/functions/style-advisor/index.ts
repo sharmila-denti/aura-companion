@@ -13,14 +13,26 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    // Sanitize context fields with allowlists to prevent prompt injection
+    const VALID_GENDERS = ['female', 'male', 'other'];
+    const VALID_SKIN_TONES = ['fair', 'light', 'medium', 'olive', 'tan', 'dark'];
+    const VALID_BMI = ['underweight', 'normal', 'overweight', 'obese'];
+    const VALID_LIFESTYLES = ['student', 'professional', 'sedentary', 'other'];
+
+    const safeGender = VALID_GENDERS.includes(context?.gender) ? context.gender : 'not specified';
+    const safeSkinTone = VALID_SKIN_TONES.includes(context?.skinTone) ? context.skinTone : 'not specified';
+    const safeBmi = VALID_BMI.includes(context?.bmiCategory) ? context.bmiCategory : 'not specified';
+    const safeLifestyle = VALID_LIFESTYLES.includes(context?.lifestyle) ? context.lifestyle : 'not specified';
+    const safeAge = typeof context?.age === 'number' && context.age > 0 && context.age < 150 ? String(context.age) : 'not specified';
+
     const systemPrompt = `You are "Hey Me! Style Advisor", an expert AI fashion & styling consultant. You provide personalized outfit and accessory recommendations.
 
 USER PROFILE:
-- Gender: ${context?.gender || 'not specified'}
-- Skin Tone: ${context?.skinTone || 'not specified'}
-- Body Type (BMI category): ${context?.bmiCategory || 'not specified'}
-- Lifestyle: ${context?.lifestyle || 'not specified'}
-- Age: ${context?.age || 'not specified'}
+- Gender: ${safeGender}
+- Skin Tone: ${safeSkinTone}
+- Body Type (BMI category): ${safeBmi}
+- Lifestyle: ${safeLifestyle}
+- Age: ${safeAge}
 
 YOUR EXPERTISE:
 1. **Color Analysis**: Recommend clothing colors that complement the user's skin tone using seasonal color analysis (warm/cool undertones)
