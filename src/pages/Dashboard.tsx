@@ -40,6 +40,7 @@ export default function Dashboard() {
 
   const quickActions = [
     { icon: Target, label: 'Targets', color: 'hsl(var(--accent))', path: '/targets' },
+    { icon: Shirt, label: 'Style', color: 'hsl(var(--beauty))', path: '/style' },
     { icon: Sparkles, label: isMale ? 'Grooming' : 'Beauty', color: 'hsl(var(--beauty))', path: '/beauty' },
     { icon: Heart, label: 'Health', color: 'hsl(var(--wellness))', path: '/health' },
     { icon: Dumbbell, label: 'Fitness', color: 'hsl(var(--fitness))', path: '/fitness' },
