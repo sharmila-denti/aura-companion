@@ -2,11 +2,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { applyGenderTheme } from "@/lib/theme";
 import { requestNotificationPermission, startNotificationScheduler } from "@/lib/notifications";
-import Index from "./pages/Index";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
@@ -21,6 +22,21 @@ import MoodMusic from "./pages/MoodMusic";
 
 const queryClient = new QueryClient();
 
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen gradient-soft flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
+
 function AppContent() {
   useEffect(() => {
     applyGenderTheme();
@@ -32,17 +48,17 @@ function AppContent() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/beauty" element={<BeautyTracker />} />
-        <Route path="/health" element={<HealthTracker />} />
-        <Route path="/fitness" element={<FitnessPlanner />} />
-        <Route path="/diet" element={<DietPlanner />} />
-        <Route path="/cycle" element={<CycleTracker />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/notifications" element={<NotificationSettings />} />
-        <Route path="/mood-music" element={<MoodMusic />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/beauty" element={<ProtectedRoute><BeautyTracker /></ProtectedRoute>} />
+        <Route path="/health" element={<ProtectedRoute><HealthTracker /></ProtectedRoute>} />
+        <Route path="/fitness" element={<ProtectedRoute><FitnessPlanner /></ProtectedRoute>} />
+        <Route path="/diet" element={<ProtectedRoute><DietPlanner /></ProtectedRoute>} />
+        <Route path="/cycle" element={<ProtectedRoute><CycleTracker /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
+        <Route path="/mood-music" element={<ProtectedRoute><MoodMusic /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -52,9 +68,11 @@ function AppContent() {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AppContent />
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <AppContent />
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

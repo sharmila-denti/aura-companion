@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          activity_level: string | null
+          age: number | null
+          avatar_style: number | null
+          created_at: string
+          food_preference: string | null
+          gender: string | null
+          hair_density: string | null
+          hair_texture: string | null
+          hair_type: string | null
+          height: number | null
+          id: string
+          language: string | null
+          lifestyle: string | null
+          medical_conditions: string[] | null
+          name: string | null
+          skin_tone: string | null
+          skin_type: string | null
+          updated_at: string
+          user_id: string
+          weight: number | null
+        }
+        Insert: {
+          activity_level?: string | null
+          age?: number | null
+          avatar_style?: number | null
+          created_at?: string
+          food_preference?: string | null
+          gender?: string | null
+          hair_density?: string | null
+          hair_texture?: string | null
+          hair_type?: string | null
+          height?: number | null
+          id?: string
+          language?: string | null
+          lifestyle?: string | null
+          medical_conditions?: string[] | null
+          name?: string | null
+          skin_tone?: string | null
+          skin_type?: string | null
+          updated_at?: string
+          user_id: string
+          weight?: number | null
+        }
+        Update: {
+          activity_level?: string | null
+          age?: number | null
+          avatar_style?: number | null
+          created_at?: string
+          food_preference?: string | null
+          gender?: string | null
+          hair_density?: string | null
+          hair_texture?: string | null
+          hair_type?: string | null
+          height?: number | null
+          id?: string
+          language?: string | null
+          lifestyle?: string | null
+          medical_conditions?: string[] | null
+          name?: string | null
+          skin_tone?: string | null
+          skin_type?: string | null
+          updated_at?: string
+          user_id?: string
+          weight?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
