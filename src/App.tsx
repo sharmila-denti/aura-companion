@@ -68,6 +68,7 @@ function AppContent() {
         <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
         <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
         <Route path="/targets" element={<ProtectedRoute><DailyTargets /></ProtectedRoute>} />
+        <Route path="/style" element={<ProtectedRoute><StyleAdvisor /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
