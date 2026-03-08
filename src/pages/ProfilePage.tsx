@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
-import PersonalizedAvatar from '@/components/PersonalizedAvatar';
+import AnimatedAvatar from '@/components/AnimatedAvatar';
 import { getProfile, saveProfile, clearAllData } from '@/lib/store';
 import { calculateBMI, UserProfile } from '@/lib/types';
 import { applyGenderTheme } from '@/lib/theme';
