@@ -221,23 +221,54 @@ export class MoodMusicEngine {
       this.activeOscillators.push(osc);
     });
 
-    // Melody loop
+    // Melody loop — use language scale/base if available
+    const melodyScale = langConfig ? langConfig.scale : config.scale;
+    const melodyBase = langConfig ? langConfig.baseFreq : config.baseFreq;
+    const ornament = langConfig ? langConfig.ornament : 'none';
     const beatInterval = 60000 / config.bpm;
     let noteIndex = 0;
 
     const playNote = () => {
       if (!this.isPlaying) return;
       
-      const semitone = config.scale[noteIndex % config.scale.length];
+      const semitone = melodyScale[noteIndex % melodyScale.length];
       const octaveShift = Math.random() > 0.7 ? 12 : 0;
-      const freq = this.semitonesToFreq(config.baseFreq, semitone + octaveShift);
+      const freq = this.semitonesToFreq(melodyBase, semitone + octaveShift);
 
       const osc = ctx.createOscillator();
       osc.type = config.waveform;
       osc.frequency.value = freq;
 
-      const noteGain = ctx.createGain();
+      // Apply language-specific ornaments
       const now = ctx.currentTime;
+      if (ornament === 'gamaka') {
+        // Indian classical-style oscillation
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.linearRampToValueAtTime(freq * 1.03, now + config.noteLength * 0.25);
+        osc.frequency.linearRampToValueAtTime(freq * 0.97, now + config.noteLength * 0.5);
+        osc.frequency.linearRampToValueAtTime(freq, now + config.noteLength * 0.75);
+      } else if (ornament === 'vibrato') {
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        lfo.frequency.value = 5;
+        lfoGain.gain.value = freq * 0.015;
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+        lfo.start(now);
+        lfo.stop(now + config.noteLength + 0.1);
+      } else if (ornament === 'slide') {
+        const nextSemitone = melodyScale[(noteIndex + 1) % melodyScale.length];
+        const nextFreq = this.semitonesToFreq(melodyBase, nextSemitone + octaveShift);
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.linearRampToValueAtTime(nextFreq, now + config.noteLength * 0.8);
+      } else if (ornament === 'trill') {
+        const trillFreq = this.semitonesToFreq(melodyBase, semitone + 1 + octaveShift);
+        for (let t = 0; t < 4; t++) {
+          osc.frequency.setValueAtTime(t % 2 === 0 ? freq : trillFreq, now + (t * config.noteLength * 0.2));
+        }
+      }
+
+      const noteGain = ctx.createGain();
       noteGain.gain.setValueAtTime(0, now);
       noteGain.gain.linearRampToValueAtTime(config.melodyVolume, now + 0.05);
       noteGain.gain.exponentialRampToValueAtTime(0.001, now + config.noteLength);
@@ -250,9 +281,9 @@ export class MoodMusicEngine {
       // Random walk through scale
       if (Math.random() > 0.3) {
         noteIndex += Math.random() > 0.5 ? 1 : -1;
-        if (noteIndex < 0) noteIndex = config.scale.length - 1;
+        if (noteIndex < 0) noteIndex = melodyScale.length - 1;
       } else {
-        noteIndex = Math.floor(Math.random() * config.scale.length);
+        noteIndex = Math.floor(Math.random() * melodyScale.length);
       }
     };
 
