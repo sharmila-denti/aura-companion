@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ProfileEditForm from '@/components/ProfileEditForm';
 
-const AVATAR_STYLE_COUNT = 5;
+
 
 export default function ProfilePage() {
   const navigate = useNavigate();
