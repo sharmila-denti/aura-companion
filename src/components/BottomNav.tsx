@@ -1,17 +1,21 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Sparkles, Heart, Dumbbell, Utensils } from 'lucide-react';
+import { Home, Sparkles, Heart, Dumbbell, Utensils, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const navItems = [
-  { path: '/dashboard', icon: Home, label: 'Home' },
-  { path: '/beauty', icon: Sparkles, label: 'Beauty' },
-  { path: '/health', icon: Heart, label: 'Health' },
-  { path: '/fitness', icon: Dumbbell, label: 'Fitness' },
-  { path: '/diet', icon: Utensils, label: 'Diet' },
-];
+import { getProfile } from '@/lib/store';
 
 export default function BottomNav() {
   const location = useLocation();
+  const profile = getProfile();
+  const isMale = profile?.gender === 'male';
+
+  const navItems = [
+    { path: '/dashboard', icon: Home, label: 'Home' },
+    { path: '/beauty', icon: Sparkles, label: isMale ? 'Grooming' : 'Beauty' },
+    { path: '/health', icon: Heart, label: 'Health' },
+    { path: '/fitness', icon: Dumbbell, label: 'Fitness' },
+    ...(isMale ? [] : [{ path: '/cycle', icon: Calendar, label: 'Cycle' }]),
+    { path: '/diet', icon: Utensils, label: 'Diet' },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-border/50 px-2 pb-[env(safe-area-inset-bottom)]">

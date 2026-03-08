@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { saveProfile } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
+import { applyGenderTheme } from '@/lib/theme';
+import { requestNotificationPermission, startNotificationScheduler } from '@/lib/notifications';
 
 const medicalOptions = ['None', 'Diabetes', 'PCOS', 'Anemia', 'Gastritis', 'Thyroid', 'Hypertension'];
 
@@ -31,8 +33,11 @@ export default function Onboarding() {
     return true;
   };
 
-  const finish = () => {
+  const finish = async () => {
     saveProfile(profile as UserProfile);
+    applyGenderTheme();
+    const granted = await requestNotificationPermission();
+    if (granted) startNotificationScheduler();
     navigate('/dashboard');
   };
 
