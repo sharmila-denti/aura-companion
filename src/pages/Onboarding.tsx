@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { saveProfile } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
+import { applyGenderTheme } from '@/lib/theme';
+import { requestNotificationPermission, startNotificationScheduler } from '@/lib/notifications';
 
 const medicalOptions = ['None', 'Diabetes', 'PCOS', 'Anemia', 'Gastritis', 'Thyroid', 'Hypertension'];
 
