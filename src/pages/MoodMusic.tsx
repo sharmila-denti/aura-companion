@@ -8,12 +8,16 @@ import { Slider } from '@/components/ui/slider';
 import { getProfile } from '@/lib/store';
 import { UserProfile } from '@/lib/types';
 
+const moods: Mood[] = ['sad', 'calm', 'joyful', 'energetic', 'anxious', 'sleepy'];
+const languages = Object.keys(languageConfigs) as Array<keyof typeof languageConfigs>;
+
 export default function MoodMusic() {
   const engineRef = useRef<MoodMusicEngine | null>(null);
   const [activeMood, setActiveMood] = useState<Mood | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
+  const [selectedLang, setSelectedLang] = useState<UserProfile['language']>('english');
 
   useEffect(() => {
     engineRef.current = new MoodMusicEngine();
