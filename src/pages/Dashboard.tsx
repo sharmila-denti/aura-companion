@@ -67,6 +67,13 @@ export default function Dashboard() {
               skinTone={profile.skinTone}
               hairTexture={profile.hairTexture}
               hairDensity={profile.hairDensity}
+              eyeColor={profile.eyeColor}
+              eyeSize={profile.eyeSize}
+              hairColor={profile.hairColor}
+              hairLength={profile.hairLength}
+              lipStyle={profile.lipStyle}
+              lipColor={profile.lipColor}
+              dressStyle={profile.dressStyle}
               size={48}
               avatarStyle={(profile as any).avatarStyle ?? 0}
               level={gamification.level}
