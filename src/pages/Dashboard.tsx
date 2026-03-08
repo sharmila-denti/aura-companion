@@ -41,6 +41,7 @@ export default function Dashboard() {
     { icon: Dumbbell, label: 'Fitness', color: 'hsl(var(--fitness))', path: '/fitness' },
     { icon: Utensils, label: 'Diet', color: 'hsl(var(--nutrition))', path: '/diet' },
     ...(!isMale ? [{ icon: Calendar, label: 'Cycle', color: 'hsl(var(--cycle))', path: '/cycle' }] : []),
+    { icon: Music, label: 'Mood Music', color: 'hsl(var(--beauty))', path: '/mood-music' },
     { icon: Bell, label: 'Reminders', color: 'hsl(var(--accent))', path: '/notifications' },
     { icon: Settings, label: 'Profile', color: 'hsl(var(--muted-foreground))', path: '/profile' },
   ];
