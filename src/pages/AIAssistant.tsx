@@ -40,11 +40,17 @@ export default function AIAssistant() {
     let assistantContent = '';
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = session?.access_token;
+      if (!accessToken) {
+        throw new Error('Please log in to use the AI assistant');
+      }
+
       const resp = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ messages: allMessages }),
       });

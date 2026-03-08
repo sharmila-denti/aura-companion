@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { Check, Crown, Sparkles, Dumbbell, Heart, Scissors, BookOpen, Bot, Calendar, QrCode } from 'lucide-react';
 import heyMeLogo from '@/assets/heyme-logo.png';
 import upiQr from '@/assets/upi-qr.jpg';
+import { useSubscription } from '@/hooks/useSubscription';
+import { toast } from '@/hooks/use-toast';
 
 const plans = [
   { id: 'monthly', label: '1 Month', price: '₹39', period: '/month', savings: '', popular: false },
@@ -24,12 +26,13 @@ const benefits = [
 
 export default function Subscription() {
   const navigate = useNavigate();
+  const { saveSubscription, skipSubscription } = useSubscription();
   const [selectedPlan, setSelectedPlan] = useState('half-yearly');
   const [showQR, setShowQR] = useState(false);
 
   const UPI_ID = 'sharmiideepii@oksbi';
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
     const amount = plan.price.replace('₹', '');
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=HeyMe&am=${amount}&cu=INR&tn=HeyMe+${plan.label}+Subscription`;
@@ -37,16 +40,33 @@ export default function Subscription() {
     // Try UPI intent
     window.location.href = upiUrl;
     
-    // Mark as subscribed after redirect attempt
-    setTimeout(() => {
-      localStorage.setItem('heyme_subscribed', 'true');
-      navigate('/onboarding');
+    // Save subscription after redirect attempt
+    setTimeout(async () => {
+      try {
+        await saveSubscription(selectedPlan);
+        navigate('/onboarding');
+      } catch {
+        toast({ title: 'Error', description: 'Failed to save subscription', variant: 'destructive' });
+      }
     }, 3000);
   };
 
-  const handleSkip = () => {
-    localStorage.setItem('heyme_subscribed', 'skipped');
-    navigate('/onboarding');
+  const handleSkip = async () => {
+    try {
+      await skipSubscription();
+      navigate('/onboarding');
+    } catch {
+      toast({ title: 'Error', description: 'Something went wrong', variant: 'destructive' });
+    }
+  };
+
+  const handlePaymentConfirmed = async () => {
+    try {
+      await saveSubscription(selectedPlan);
+      navigate('/onboarding');
+    } catch {
+      toast({ title: 'Error', description: 'Failed to save subscription', variant: 'destructive' });
+    }
   };
 
   return (
@@ -168,10 +188,7 @@ export default function Subscription() {
             <img src={upiQr} alt="UPI QR Code" className="w-56 mx-auto rounded-xl" />
             <p className="text-xs text-muted-foreground mt-3">UPI ID: sharmiideepii@oksbi</p>
             <button
-              onClick={() => {
-                localStorage.setItem('heyme_subscribed', 'true');
-                navigate('/onboarding');
-              }}
+              onClick={handlePaymentConfirmed}
               className="mt-3 w-full h-10 rounded-xl bg-secondary text-foreground text-sm font-medium"
             >
               I've completed the payment →

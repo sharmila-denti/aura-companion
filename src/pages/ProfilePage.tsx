@@ -153,7 +153,7 @@ export default function ProfilePage() {
           <div className="flex-1">
             <p className="text-sm font-semibold text-foreground">Subscription Plan</p>
             <p className="text-xs text-muted-foreground">
-              {localStorage.getItem('heyme_subscribed') === 'true' ? 'Active' : 'Upgrade to Premium'}
+              {subscribed && plan !== 'free_trial' ? 'Active' : 'Upgrade to Premium'}
             </p>
           </div>
           <span className="text-xs font-medium text-primary">→</span>
