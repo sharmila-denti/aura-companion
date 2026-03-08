@@ -25,6 +25,7 @@ const benefits = [
 export default function Subscription() {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('half-yearly');
+  const [showQR, setShowQR] = useState(false);
 
   const UPI_ID = 'sharmiideepii@oksbi';
 
