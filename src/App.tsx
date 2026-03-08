@@ -23,6 +23,7 @@ import Subscription from "./pages/Subscription";
 import AIAssistant from "./pages/AIAssistant";
 import Diary from "./pages/Diary";
 import DailyTargets from "./pages/DailyTargets";
+import StyleAdvisor from "./pages/StyleAdvisor";
 
 const queryClient = new QueryClient();
 
