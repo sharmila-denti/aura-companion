@@ -164,6 +164,33 @@ export default function MoodMusic() {
           )}
         </AnimatePresence>
 
+        {/* Language Selector */}
+        <div>
+          <h3 className="font-bold font-display text-foreground flex items-center gap-2 mb-3">
+            <Globe size={18} className="text-primary" /> Music Style (Language)
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {languages.map(lang => (
+              <button
+                key={lang}
+                onClick={() => {
+                  setSelectedLang(lang);
+                  if (activeMood && isPlaying) {
+                    engineRef.current?.stop();
+                    engineRef.current?.play(activeMood, lang);
+                    engineRef.current?.setVolume(isMuted ? 0 : volume / 100);
+                  }
+                }}
+                className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
+                  selectedLang === lang ? 'gradient-warm text-primary-foreground' : 'glass-card text-foreground'
+                }`}
+              >
+                {languageConfigs[lang].label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Mood Selector */}
         <div>
           <h3 className="font-bold font-display text-foreground flex items-center gap-2 mb-3">
