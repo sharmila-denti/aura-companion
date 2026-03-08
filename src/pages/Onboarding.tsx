@@ -249,7 +249,7 @@ export default function Onboarding() {
           <div className="w-10 h-10 rounded-xl gradient-warm flex items-center justify-center">
             <Sparkles size={20} className="text-primary-foreground" />
           </div>
-          <span className="text-lg font-bold font-display text-foreground">GlowUp</span>
+          <span className="text-lg font-bold font-display text-foreground">Hey Me!</span>
         </motion.div>
 
         {/* Progress */}
