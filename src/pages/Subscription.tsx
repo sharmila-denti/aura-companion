@@ -143,8 +143,42 @@ export default function Subscription() {
           className="w-full h-14 rounded-2xl gradient-warm text-primary-foreground font-semibold text-base flex items-center justify-center gap-2"
         >
           <Crown size={18} />
-          Subscribe Now
+          Pay with UPI App
         </motion.button>
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.55 }}
+          onClick={() => setShowQR(!showQR)}
+          className="w-full h-12 rounded-2xl border-2 border-primary bg-primary/5 text-primary font-semibold text-sm flex items-center justify-center gap-2"
+        >
+          <QrCode size={18} />
+          {showQR ? 'Hide QR Code' : 'Pay via QR Code'}
+        </motion.button>
+
+        {showQR && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="glass-card rounded-2xl p-4 text-center"
+          >
+            <p className="text-sm font-medium text-foreground mb-3">
+              Scan to pay <span className="font-bold text-primary">{plans.find(p => p.id === selectedPlan)?.price}</span> for {plans.find(p => p.id === selectedPlan)?.label}
+            </p>
+            <img src={upiQr} alt="UPI QR Code" className="w-56 mx-auto rounded-xl" />
+            <p className="text-xs text-muted-foreground mt-3">UPI ID: sharmiideepii@oksbi</p>
+            <button
+              onClick={() => {
+                localStorage.setItem('heyme_subscribed', 'true');
+                navigate('/onboarding');
+              }}
+              className="mt-3 w-full h-10 rounded-xl bg-secondary text-foreground text-sm font-medium"
+            >
+              I've completed the payment →
+            </button>
+          </motion.div>
+        )}
+
         <button
           onClick={handleSkip}
           className="w-full text-center text-sm text-muted-foreground py-2"
