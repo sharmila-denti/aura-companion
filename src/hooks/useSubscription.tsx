@@ -41,10 +41,15 @@ export function useSubscription() {
 
   const saveSubscription = async (planId: string) => {
     if (!user) return;
+    // Save as pending - requires manual/server-side verification to activate
+    const validPlans = ['monthly', 'half-yearly', 'yearly'];
+    if (!validPlans.includes(planId)) {
+      throw new Error('Invalid plan');
+    }
     const { error } = await supabase
       .from('subscriptions')
       .upsert(
-        { user_id: user.id, plan: planId, status: 'active' },
+        { user_id: user.id, plan: planId, status: 'pending' },
         { onConflict: 'user_id' }
       );
     if (error) {
