@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Sparkles, Heart, Dumbbell, Utensils, Calendar, Bot, BookOpen } from 'lucide-react';
+import { Home, Sparkles, Heart, Dumbbell, Target, Calendar, Bot, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getProfile } from '@/lib/store';
 
