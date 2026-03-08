@@ -43,7 +43,7 @@ export default function ProfilePage() {
   const cancelEdit = () => {
     setDraft(null);
     setEditing(false);
-    setAvatarStyle((profile as any).avatarStyle ?? 0);
+    
   };
 
   const saveEdit = () => {
