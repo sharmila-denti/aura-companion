@@ -60,11 +60,15 @@ export default function Dashboard() {
             <h1 className="text-2xl font-bold font-display text-primary-foreground mt-0.5">{profile.name} ✨</h1>
           </div>
           <button onClick={() => navigate('/profile')} className="shrink-0">
-            <PersonalizedAvatar
+            <AnimatedAvatar
               name={profile.name}
               gender={profile.gender}
+              skinTone={profile.skinTone}
+              hairTexture={profile.hairTexture}
+              hairDensity={profile.hairDensity}
               size={48}
               avatarStyle={(profile as any).avatarStyle ?? 0}
+              level={gamification.level}
               className="ring-2 ring-primary-foreground/30"
             />
           </button>
