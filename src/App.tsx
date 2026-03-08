@@ -70,6 +70,7 @@ function AppContent() {
         <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
         <Route path="/targets" element={<ProtectedRoute><DailyTargets /></ProtectedRoute>} />
         <Route path="/style" element={<ProtectedRoute><StyleAdvisor /></ProtectedRoute>} />
+        <Route path="/qr-scanner" element={<ProtectedRoute><QRScanner /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
