@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
 import AnimatedAvatar from '@/components/AnimatedAvatar';
