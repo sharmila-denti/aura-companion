@@ -24,6 +24,7 @@ import AIAssistant from "./pages/AIAssistant";
 import Diary from "./pages/Diary";
 import DailyTargets from "./pages/DailyTargets";
 import StyleAdvisor from "./pages/StyleAdvisor";
+import QRScanner from "./pages/QRScanner";
 
 const queryClient = new QueryClient();
 
