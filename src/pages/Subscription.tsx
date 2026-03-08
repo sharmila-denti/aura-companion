@@ -158,6 +158,25 @@ export default function Subscription() {
           <Crown size={18} />
           Pay with UPI App
         </motion.button>
+
+        {paymentInitiated && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass-card rounded-2xl p-4 text-center"
+          >
+            <p className="text-sm font-medium text-foreground mb-2">Completed your payment?</p>
+            <p className="text-xs text-muted-foreground mb-3">
+              After payment, tap below to confirm. Your subscription will be verified.
+            </p>
+            <button
+              onClick={handlePaymentConfirmed}
+              className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium"
+            >
+              I've completed the payment →
+            </button>
+          </motion.div>
+        )}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
