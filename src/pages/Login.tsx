@@ -10,7 +10,10 @@ export default function Login() {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && user) navigate('/dashboard');
+    if (!loading && user) {
+      const subscribed = localStorage.getItem('heyme_subscribed');
+      navigate(subscribed ? '/dashboard' : '/subscription');
+    }
   }, [user, loading, navigate]);
 
   const handleGoogleLogin = async () => {

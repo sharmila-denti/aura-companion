@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Sparkles, Heart, Dumbbell, Utensils, Calendar } from 'lucide-react';
+import { Home, Sparkles, Heart, Dumbbell, Utensils, Calendar, Bot, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getProfile } from '@/lib/store';
 
@@ -15,6 +15,8 @@ export default function BottomNav() {
     { path: '/fitness', icon: Dumbbell, label: 'Fitness' },
     ...(isMale ? [] : [{ path: '/cycle', icon: Calendar, label: 'Cycle' }]),
     { path: '/diet', icon: Utensils, label: 'Diet' },
+    { path: '/ai-assistant', icon: Bot, label: 'AI' },
+    { path: '/diary', icon: BookOpen, label: 'Diary' },
   ];
 
   return (

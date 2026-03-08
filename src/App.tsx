@@ -19,6 +19,9 @@ import CycleTracker from "./pages/CycleTracker";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationSettings from "./pages/NotificationSettings";
 import MoodMusic from "./pages/MoodMusic";
+import Subscription from "./pages/Subscription";
+import AIAssistant from "./pages/AIAssistant";
+import Diary from "./pages/Diary";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +62,9 @@ function AppContent() {
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
         <Route path="/mood-music" element={<ProtectedRoute><MoodMusic /></ProtectedRoute>} />
+        <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
+        <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
+        <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
