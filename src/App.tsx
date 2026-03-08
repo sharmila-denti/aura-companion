@@ -22,6 +22,7 @@ import MoodMusic from "./pages/MoodMusic";
 import Subscription from "./pages/Subscription";
 import AIAssistant from "./pages/AIAssistant";
 import Diary from "./pages/Diary";
+import DailyTargets from "./pages/DailyTargets";
 
 const queryClient = new QueryClient();
 
