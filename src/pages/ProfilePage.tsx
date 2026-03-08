@@ -19,7 +19,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<UserProfile | null>(null);
-  const [avatarStyle, setAvatarStyle] = useState(0);
+  
 
   useEffect(() => {
     const p = getProfile();
