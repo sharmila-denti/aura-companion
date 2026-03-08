@@ -21,7 +21,12 @@ export default function MoodMusic() {
 
   useEffect(() => {
     engineRef.current = new MoodMusicEngine();
+    const profile = getProfile();
+    if (profile?.language) setSelectedLang(profile.language);
     return () => {
+      engineRef.current?.destroy();
+    };
+  }, []);
       engineRef.current?.destroy();
     };
   }, []);
