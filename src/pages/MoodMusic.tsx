@@ -27,9 +27,6 @@ export default function MoodMusic() {
       engineRef.current?.destroy();
     };
   }, []);
-      engineRef.current?.destroy();
-    };
-  }, []);
 
   const handleMoodSelect = (mood: Mood) => {
     const engine = engineRef.current;
