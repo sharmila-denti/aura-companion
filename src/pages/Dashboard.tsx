@@ -7,6 +7,7 @@ import { UserProfile, calculateBMI } from '@/lib/types';
 import { getGenderSpecificTips } from '@/lib/notifications';
 import MetricCard from '@/components/MetricCard';
 import BottomNav from '@/components/BottomNav';
+import PersonalizedAvatar from '@/components/PersonalizedAvatar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
