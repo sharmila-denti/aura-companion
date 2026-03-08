@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Plus, Settings } from 'lucide-react';
+import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell } from 'lucide-react';
 import { getProfile, getTrackerEntries, addTrackerEntry } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
+import { getGenderSpecificTips } from '@/lib/notifications';
 import MetricCard from '@/components/MetricCard';
 import BottomNav from '@/components/BottomNav';
-import { Button } from '@/components/ui/button';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [tipIndex, setTipIndex] = useState(0);
 
   useEffect(() => {
     const p = getProfile();
@@ -26,6 +27,8 @@ export default function Dashboard() {
   const waterCount = todayEntries.filter(e => e.type === 'water').length;
   const sleepEntry = todayEntries.find(e => e.type === 'sleep');
   const stepsEntry = todayEntries.find(e => e.type === 'steps');
+  const isMale = profile.gender === 'male';
+  const tips = getGenderSpecificTips();
 
   const addWater = () => {
     addTrackerEntry({ date: today, type: 'water', value: 1 });
@@ -33,11 +36,12 @@ export default function Dashboard() {
   };
 
   const quickActions = [
-    { icon: Sparkles, label: 'Beauty', color: 'hsl(var(--beauty))', path: '/beauty' },
+    { icon: Sparkles, label: isMale ? 'Grooming' : 'Beauty', color: 'hsl(var(--beauty))', path: '/beauty' },
     { icon: Heart, label: 'Health', color: 'hsl(var(--wellness))', path: '/health' },
     { icon: Dumbbell, label: 'Fitness', color: 'hsl(var(--fitness))', path: '/fitness' },
     { icon: Utensils, label: 'Diet', color: 'hsl(var(--nutrition))', path: '/diet' },
-    { icon: Calendar, label: 'Cycle', color: 'hsl(var(--cycle))', path: '/cycle' },
+    ...(!isMale ? [{ icon: Calendar, label: 'Cycle', color: 'hsl(var(--cycle))', path: '/cycle' }] : []),
+    { icon: Bell, label: 'Reminders', color: 'hsl(var(--accent))', path: '/notifications' },
     { icon: Settings, label: 'Profile', color: 'hsl(var(--muted-foreground))', path: '/profile' },
   ];
 
@@ -96,47 +100,39 @@ export default function Dashboard() {
           <h2 className="text-lg font-bold font-display text-foreground">Today's Progress</h2>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <MetricCard
-            icon={Droplets}
-            label="Water Intake"
-            value={waterCount}
-            unit="glasses"
-            color="hsl(var(--fitness))"
-            delay={0.1}
-            onClick={addWater}
-          />
-          <MetricCard
-            icon={Moon}
-            label="Sleep"
-            value={sleepEntry ? String(sleepEntry.value) : '—'}
-            unit="hrs"
-            color="hsl(var(--cycle))"
-            delay={0.15}
-          />
-          <MetricCard
-            icon={Footprints}
-            label="Steps"
-            value={stepsEntry ? String(stepsEntry.value) : '—'}
-            color="hsl(var(--wellness))"
-            delay={0.2}
-          />
-          <MetricCard
-            icon={Sparkles}
-            label="Self-Care"
-            value={todayEntries.filter(e => e.type === 'skincare').length > 0 ? '✓' : '—'}
-            color="hsl(var(--beauty))"
-            delay={0.25}
-          />
+          <MetricCard icon={Droplets} label="Water Intake" value={waterCount} unit="glasses" color="hsl(var(--fitness))" delay={0.1} onClick={addWater} />
+          <MetricCard icon={Moon} label="Sleep" value={sleepEntry ? String(sleepEntry.value) : '—'} unit="hrs" color="hsl(var(--accent))" delay={0.15} />
+          <MetricCard icon={Footprints} label="Steps" value={stepsEntry ? String(stepsEntry.value) : '—'} color="hsl(var(--wellness))" delay={0.2} />
+          <MetricCard icon={Sparkles} label="Self-Care" value={todayEntries.filter(e => e.type === 'skincare').length > 0 ? '✓' : '—'} color="hsl(var(--beauty))" delay={0.25} />
         </div>
       </div>
 
-      {/* Tips */}
+      {/* Gender-specific Tips */}
       <div className="px-5 mt-6">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="glass-card rounded-2xl p-5"
+        >
+          <h3 className="font-bold font-display text-foreground mb-2">
+            {isMale ? 'Men\'s Wellness Tip 💪' : profile.gender === 'other' ? 'Wellness Tip ✨' : 'Women\'s Wellness Tip 🌸'}
+          </h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">{tips[tipIndex % tips.length]}</p>
+          <button
+            onClick={() => setTipIndex(i => i + 1)}
+            className="mt-2 text-xs font-medium text-primary hover:underline"
+          >
+            Next tip →
+          </button>
+        </motion.div>
+
+        {/* BMI tip */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="glass-card rounded-2xl p-5 mt-3"
         >
           <h3 className="font-bold font-display text-foreground mb-1">Daily Tip ✨</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
