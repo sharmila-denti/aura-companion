@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
+import heyMeLogo from '@/assets/heyme-logo.png';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -246,8 +247,8 @@ export default function Onboarding() {
     <div className="min-h-screen gradient-soft flex flex-col">
       <div className="px-5 pt-12 pb-4">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 mb-8">
-          <div className="w-10 h-10 rounded-xl gradient-warm flex items-center justify-center">
-            <Sparkles size={20} className="text-primary-foreground" />
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden">
+            <img src={heyMeLogo} alt="Hey Me!" className="w-full h-full object-contain" />
           </div>
           <span className="text-lg font-bold font-display text-foreground">Hey Me!</span>
         </motion.div>

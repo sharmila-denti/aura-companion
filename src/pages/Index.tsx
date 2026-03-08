@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getProfile } from '@/lib/store';
+import heyMeLogo from '@/assets/heyme-logo.png';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -21,8 +22,8 @@ const Index = () => {
         transition={{ duration: 0.6 }}
         className="mb-8"
       >
-        <div className="w-20 h-20 rounded-2xl gradient-warm flex items-center justify-center mx-auto mb-6 shadow-[var(--shadow-soft)]">
-          <Sparkles size={36} className="text-primary-foreground" />
+        <div className="w-24 h-24 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <img src={heyMeLogo} alt="Hey Me! logo" className="w-full h-full object-contain" />
         </div>
         <h1 className="text-4xl font-bold font-display text-foreground mb-3">
           Hey <span className="text-gradient">Me!</span>
