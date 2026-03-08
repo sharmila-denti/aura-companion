@@ -17,6 +17,7 @@ import DietPlanner from "./pages/DietPlanner";
 import CycleTracker from "./pages/CycleTracker";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationSettings from "./pages/NotificationSettings";
+import MoodMusic from "./pages/MoodMusic";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ function AppContent() {
         <Route path="/cycle" element={<CycleTracker />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/notifications" element={<NotificationSettings />} />
+        <Route path="/mood-music" element={<MoodMusic />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
