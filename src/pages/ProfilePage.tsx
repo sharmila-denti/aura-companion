@@ -92,37 +92,9 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Avatar */}
-          <div className="relative mx-auto mb-3 w-fit">
-            <AnimatedAvatar
-              name={current.name}
-              gender={current.gender}
-              skinTone={current.skinTone}
-              hairTexture={current.hairTexture}
-              hairDensity={current.hairDensity}
-              eyeColor={current.eyeColor}
-              eyeSize={current.eyeSize}
-              hairColor={current.hairColor}
-              hairLength={current.hairLength}
-              lipStyle={current.lipStyle}
-              lipColor={current.lipColor}
-              dressStyle={current.dressStyle}
-              size={80}
-              avatarStyle={avatarStyle}
-              level={getGamificationState().level}
-              className="ring-4 ring-primary-foreground/20"
-            />
-            {editing && (
-              <div className="flex items-center justify-center gap-3 mt-2">
-                <button onClick={() => cycleAvatar(-1)} className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <ChevronLeft size={14} />
-                </button>
-                <span className="text-xs opacity-70">Style {avatarStyle + 1}/{AVATAR_STYLE_COUNT}</span>
-                <button onClick={() => cycleAvatar(1)} className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-            )}
+          {/* Name Initial */}
+          <div className="w-16 h-16 rounded-full bg-primary-foreground/20 flex items-center justify-center mx-auto mb-3">
+            <span className="text-2xl font-bold">{current.name.charAt(0).toUpperCase()}</span>
           </div>
 
           {editing ? (
