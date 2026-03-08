@@ -138,6 +138,25 @@ export default function ProfilePage() {
           <ProfileInfoCards profile={profile} />
         )}
 
+        {/* Subscription */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={() => navigate('/subscription')}
+          className="w-full glass-card rounded-xl p-4 flex items-center gap-3 text-left"
+        >
+          <div className="w-10 h-10 rounded-lg gradient-warm flex items-center justify-center">
+            <Crown size={18} className="text-primary-foreground" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-foreground">Subscription Plan</p>
+            <p className="text-xs text-muted-foreground">
+              {localStorage.getItem('heyme_subscribed') === 'true' ? 'Active' : 'Upgrade to Premium'}
+            </p>
+          </div>
+          <span className="text-xs font-medium text-primary">→</span>
+        </motion.button>
+
         <Button
           onClick={handleReset}
           variant="outline"
