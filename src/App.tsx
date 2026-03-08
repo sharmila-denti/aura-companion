@@ -17,6 +17,7 @@ import DietPlanner from "./pages/DietPlanner";
 import CycleTracker from "./pages/CycleTracker";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationSettings from "./pages/NotificationSettings";
+import MoodMusic from "./pages/MoodMusic";
 
 const queryClient = new QueryClient();
 
