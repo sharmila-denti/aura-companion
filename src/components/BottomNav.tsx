@@ -15,6 +15,8 @@ export default function BottomNav() {
     { path: '/fitness', icon: Dumbbell, label: 'Fitness' },
     ...(isMale ? [] : [{ path: '/cycle', icon: Calendar, label: 'Cycle' }]),
     { path: '/diet', icon: Utensils, label: 'Diet' },
+    { path: '/ai-assistant', icon: Bot, label: 'AI' },
+    { path: '/diary', icon: BookOpen, label: 'Diary' },
   ];
 
   return (
