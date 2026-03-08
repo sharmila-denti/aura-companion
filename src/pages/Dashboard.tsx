@@ -51,9 +51,20 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="gradient-warm px-5 pt-10 pb-8 rounded-b-[2rem]">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="text-primary-foreground/80 text-sm">Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'},</p>
-          <h1 className="text-2xl font-bold font-display text-primary-foreground mt-0.5">{profile.name} ✨</h1>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
+          <div>
+            <p className="text-primary-foreground/80 text-sm">Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'},</p>
+            <h1 className="text-2xl font-bold font-display text-primary-foreground mt-0.5">{profile.name} ✨</h1>
+          </div>
+          <button onClick={() => navigate('/profile')} className="shrink-0">
+            <PersonalizedAvatar
+              name={profile.name}
+              gender={profile.gender}
+              size={48}
+              avatarStyle={(profile as any).avatarStyle ?? 0}
+              className="ring-2 ring-primary-foreground/30"
+            />
+          </button>
         </motion.div>
 
         <motion.div
