@@ -48,7 +48,7 @@ export default function ProfilePage() {
 
   const saveEdit = () => {
     if (!draft) return;
-    const updated = { ...draft, avatarStyle } as any;
+    const updated = { ...draft };
     saveProfile(updated);
     setProfile(updated);
     applyGenderTheme();
