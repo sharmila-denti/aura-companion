@@ -14,6 +14,14 @@ export interface UserProfile {
   hairDensity?: 'thin' | 'medium' | 'thick';
   hairType?: 'oily' | 'dry' | 'normal' | 'combination';
   language?: 'english' | 'hindi' | 'tamil' | 'telugu' | 'spanish' | 'french' | 'korean' | 'japanese';
+  // Avatar customization
+  eyeColor?: 'black' | 'brown' | 'hazel' | 'green' | 'blue' | 'gray';
+  eyeSize?: 'small' | 'medium' | 'large';
+  hairColor?: 'black' | 'dark-brown' | 'brown' | 'auburn' | 'blonde' | 'red' | 'gray' | 'white';
+  hairLength?: 'short' | 'medium' | 'long';
+  lipStyle?: 'thin' | 'medium' | 'full';
+  lipColor?: 'natural' | 'pink' | 'red' | 'berry' | 'nude';
+  dressStyle?: 'modern' | 'traditional' | 'casual' | 'formal' | 'sporty';
 }
 
 export interface BMIResult {
