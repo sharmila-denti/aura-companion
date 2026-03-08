@@ -56,6 +56,17 @@ function getWorkouts(bmi: BMIResult, lifestyle: string): { title: string; workou
     });
   }
 
+  // Facial Exercises — always included
+  plans.push({
+    title: '🧖 Facial Exercises',
+    workouts: [
+      { name: 'Face Yoga Basics', duration: '10 min', calories: '15', exercises: ['Forehead Smoother', 'Cheek Lifter', 'Jaw Release', 'Eye Firmer', 'Neck Toner'] },
+      { name: 'Anti-Aging Facial', duration: '12 min', calories: '10', exercises: ['Lion Face Stretch', 'Fish Face Hold', 'Brow Lift Press', 'Chin Lock', 'Temple Massage'] },
+      { name: 'De-Stress Face', duration: '8 min', calories: '8', exercises: ['Jaw Unclenching', 'Tongue-to-Roof Press', 'Ear-to-Shoulder Tilt', 'Eye Circle Rolls', 'Deep Face Relaxation'] },
+      { name: 'Sculpting Routine', duration: '15 min', calories: '12', exercises: ['Cheekbone Definer', 'Jawline Sculptor', 'Lip Plumper Exercise', 'Under-Eye Drain', 'Forehead Lift'] },
+    ],
+  });
+
   return plans;
 }
 

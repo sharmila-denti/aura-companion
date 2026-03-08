@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Music, Globe } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
-import { MoodMusicEngine, moodConfigs, Mood } from '@/lib/moodMusic';
+import { MoodMusicEngine, moodConfigs, languageConfigs, Mood } from '@/lib/moodMusic';
 import { Slider } from '@/components/ui/slider';
+import { getProfile } from '@/lib/store';
+import { UserProfile } from '@/lib/types';
 
 const moods: Mood[] = ['sad', 'calm', 'joyful', 'energetic', 'anxious', 'sleepy'];
+const languages = Object.keys(languageConfigs) as Array<keyof typeof languageConfigs>;
 
 export default function MoodMusic() {
   const engineRef = useRef<MoodMusicEngine | null>(null);
@@ -14,9 +17,12 @@ export default function MoodMusic() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
+  const [selectedLang, setSelectedLang] = useState<UserProfile['language']>('english');
 
   useEffect(() => {
     engineRef.current = new MoodMusicEngine();
+    const profile = getProfile();
+    if (profile?.language) setSelectedLang(profile.language);
     return () => {
       engineRef.current?.destroy();
     };
@@ -31,7 +37,7 @@ export default function MoodMusic() {
       setIsPlaying(false);
       setActiveMood(null);
     } else {
-      engine.play(mood);
+      engine.play(mood, selectedLang);
       engine.setVolume(isMuted ? 0 : volume / 100);
       setActiveMood(mood);
       setIsPlaying(true);
@@ -46,7 +52,7 @@ export default function MoodMusic() {
       engine.stop();
       setIsPlaying(false);
     } else {
-      engine.play(activeMood);
+      engine.play(activeMood, selectedLang);
       engine.setVolume(isMuted ? 0 : volume / 100);
       setIsPlaying(true);
     }
@@ -157,6 +163,33 @@ export default function MoodMusic() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Language Selector */}
+        <div>
+          <h3 className="font-bold font-display text-foreground flex items-center gap-2 mb-3">
+            <Globe size={18} className="text-primary" /> Music Style (Language)
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {languages.map(lang => (
+              <button
+                key={lang}
+                onClick={() => {
+                  setSelectedLang(lang);
+                  if (activeMood && isPlaying) {
+                    engineRef.current?.stop();
+                    engineRef.current?.play(activeMood, lang);
+                    engineRef.current?.setVolume(isMuted ? 0 : volume / 100);
+                  }
+                }}
+                className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
+                  selectedLang === lang ? 'gradient-warm text-primary-foreground' : 'glass-card text-foreground'
+                }`}
+              >
+                {languageConfigs[lang].label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Mood Selector */}
         <div>

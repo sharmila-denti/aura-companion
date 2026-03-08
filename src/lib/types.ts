@@ -10,6 +10,10 @@ export interface UserProfile {
   medicalConditions: string[];
   skinType?: 'oily' | 'dry' | 'combination' | 'normal' | 'sensitive';
   skinTone?: 'fair' | 'light' | 'medium' | 'olive' | 'tan' | 'dark';
+  hairTexture?: 'straight' | 'wavy' | 'curly' | 'coily';
+  hairDensity?: 'thin' | 'medium' | 'thick';
+  hairType?: 'oily' | 'dry' | 'normal' | 'combination';
+  language?: 'english' | 'hindi' | 'tamil' | 'telugu' | 'spanish' | 'french' | 'korean' | 'japanese';
 }
 
 export interface BMIResult {

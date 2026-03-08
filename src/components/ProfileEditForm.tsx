@@ -146,6 +146,74 @@ export default function ProfileEditForm({ draft, update, onSave }: ProfileEditFo
         </div>
       </div>
 
+      <div className="glass-card rounded-xl p-4 space-y-2">
+        <Label className="text-xs text-muted-foreground">Hair Texture</Label>
+        <div className="flex flex-wrap gap-2">
+          {(['straight', 'wavy', 'curly', 'coily'] as const).map(t => (
+            <button
+              key={t}
+              onClick={() => update({ hairTexture: t })}
+              className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
+                draft.hairTexture === t ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+              }`}
+            >
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass-card rounded-xl p-4 space-y-2">
+        <Label className="text-xs text-muted-foreground">Hair Density</Label>
+        <div className="flex flex-wrap gap-2">
+          {(['thin', 'medium', 'thick'] as const).map(d => (
+            <button
+              key={d}
+              onClick={() => update({ hairDensity: d })}
+              className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
+                draft.hairDensity === d ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+              }`}
+            >
+              {d.charAt(0).toUpperCase() + d.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass-card rounded-xl p-4 space-y-2">
+        <Label className="text-xs text-muted-foreground">Hair Type</Label>
+        <div className="flex flex-wrap gap-2">
+          {(['oily', 'dry', 'normal', 'combination'] as const).map(ht => (
+            <button
+              key={ht}
+              onClick={() => update({ hairType: ht })}
+              className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
+                draft.hairType === ht ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+              }`}
+            >
+              {ht.charAt(0).toUpperCase() + ht.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass-card rounded-xl p-4 space-y-2">
+        <Label className="text-xs text-muted-foreground">Preferred Language (Music)</Label>
+        <div className="flex flex-wrap gap-2">
+          {(['english', 'hindi', 'tamil', 'telugu', 'spanish', 'french', 'korean', 'japanese'] as const).map(l => (
+            <button
+              key={l}
+              onClick={() => update({ language: l })}
+              className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
+                draft.language === l ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+              }`}
+            >
+              {l.charAt(0).toUpperCase() + l.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <Button onClick={onSave} className="w-full h-12 rounded-xl gradient-warm text-primary-foreground font-semibold border-0">
         <Check size={16} className="mr-2" /> Save Changes
       </Button>
