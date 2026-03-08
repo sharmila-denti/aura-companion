@@ -5,7 +5,7 @@ import { ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { saveProfile, type } from '@/lib/store';
+import { saveProfile } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
 
 const medicalOptions = ['None', 'Diabetes', 'PCOS', 'Anemia', 'Gastritis', 'Thyroid', 'Hypertension'];
