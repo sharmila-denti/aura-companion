@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell, Music, Target, Shirt } from 'lucide-react';
+import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell, Music, Target, Shirt, ScanLine } from 'lucide-react';
 import { getProfile, getTrackerEntries, addTrackerEntry } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
 import { getGenderSpecificTips } from '@/lib/notifications';
@@ -46,6 +46,7 @@ export default function Dashboard() {
     { icon: Utensils, label: 'Diet', color: 'hsl(var(--nutrition))', path: '/diet' },
     ...(!isMale ? [{ icon: Calendar, label: 'Cycle', color: 'hsl(var(--cycle))', path: '/cycle' }] : []),
     { icon: Music, label: 'Mood Music', color: 'hsl(var(--beauty))', path: '/mood-music' },
+    { icon: ScanLine, label: 'QR Scan', color: 'hsl(var(--primary))', path: '/qr-scanner' },
     { icon: Bell, label: 'Reminders', color: 'hsl(var(--accent))', path: '/notifications' },
     { icon: Settings, label: 'Profile', color: 'hsl(var(--muted-foreground))', path: '/profile' },
   ];

@@ -24,6 +24,7 @@ import AIAssistant from "./pages/AIAssistant";
 import Diary from "./pages/Diary";
 import DailyTargets from "./pages/DailyTargets";
 import StyleAdvisor from "./pages/StyleAdvisor";
+import QRScanner from "./pages/QRScanner";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +70,7 @@ function AppContent() {
         <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
         <Route path="/targets" element={<ProtectedRoute><DailyTargets /></ProtectedRoute>} />
         <Route path="/style" element={<ProtectedRoute><StyleAdvisor /></ProtectedRoute>} />
+        <Route path="/qr-scanner" element={<ProtectedRoute><QRScanner /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
