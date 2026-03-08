@@ -19,6 +19,9 @@ import CycleTracker from "./pages/CycleTracker";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationSettings from "./pages/NotificationSettings";
 import MoodMusic from "./pages/MoodMusic";
+import Subscription from "./pages/Subscription";
+import AIAssistant from "./pages/AIAssistant";
+import Diary from "./pages/Diary";
 
 const queryClient = new QueryClient();
 
