@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getProfile } from '@/lib/store';
+import heyMeLogo from '@/assets/heyme-logo.png';
 
 const Index = () => {
   const navigate = useNavigate();
