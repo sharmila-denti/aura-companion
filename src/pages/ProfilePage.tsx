@@ -6,6 +6,7 @@ import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
 import AnimatedAvatar from '@/components/AnimatedAvatar';
 import { getProfile, saveProfile, clearAllData } from '@/lib/store';
+import { getGamificationState } from '@/lib/gamification';
 import { calculateBMI, UserProfile } from '@/lib/types';
 import { applyGenderTheme } from '@/lib/theme';
 import { Button } from '@/components/ui/button';
