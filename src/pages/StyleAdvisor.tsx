@@ -7,6 +7,7 @@ import BottomNav from '@/components/BottomNav';
 import { Button } from '@/components/ui/button';
 import { getProfile } from '@/lib/store';
 import { calculateBMI } from '@/lib/types';
+import { supabase } from '@/integrations/supabase/client';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
@@ -53,11 +54,18 @@ export default function StyleAdvisor() {
     let assistantSoFar = '';
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setMessages(prev => [...prev, { role: 'assistant', content: 'Please log in to use the Style Advisor.' }]);
+        setLoading(false);
+        return;
+      }
+
       const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/style-advisor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           messages: [...messages, userMsg],

@@ -32,23 +32,16 @@ export default function Subscription() {
 
   const UPI_ID = 'sharmiideepii@oksbi';
 
+  const [paymentInitiated, setPaymentInitiated] = useState(false);
+
   const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
     const amount = plan.price.replace('₹', '');
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=HeyMe&am=${amount}&cu=INR&tn=HeyMe+${plan.label}+Subscription`;
     
-    // Try UPI intent
+    // Open UPI app - do NOT auto-activate subscription
     window.location.href = upiUrl;
-    
-    // Save subscription after redirect attempt
-    setTimeout(async () => {
-      try {
-        await saveSubscription(selectedPlan);
-        navigate('/onboarding');
-      } catch {
-        toast({ title: 'Error', description: 'Failed to save subscription', variant: 'destructive' });
-      }
-    }, 3000);
+    setPaymentInitiated(true);
   };
 
   const handleSkip = async () => {
@@ -165,6 +158,25 @@ export default function Subscription() {
           <Crown size={18} />
           Pay with UPI App
         </motion.button>
+
+        {paymentInitiated && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass-card rounded-2xl p-4 text-center"
+          >
+            <p className="text-sm font-medium text-foreground mb-2">Completed your payment?</p>
+            <p className="text-xs text-muted-foreground mb-3">
+              After payment, tap below to confirm. Your subscription will be verified.
+            </p>
+            <button
+              onClick={handlePaymentConfirmed}
+              className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium"
+            >
+              I've completed the payment →
+            </button>
+          </motion.div>
+        )}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
