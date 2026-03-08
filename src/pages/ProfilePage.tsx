@@ -1,28 +1,32 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X } from 'lucide-react';
+import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
+import PersonalizedAvatar from '@/components/PersonalizedAvatar';
 import { getProfile, saveProfile, clearAllData } from '@/lib/store';
 import { calculateBMI, UserProfile } from '@/lib/types';
 import { applyGenderTheme } from '@/lib/theme';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import ProfileEditForm from '@/components/ProfileEditForm';
 
-const medicalOptions = ['None', 'Diabetes', 'PCOS', 'Anemia', 'Gastritis', 'Thyroid', 'Hypertension'];
+const AVATAR_STYLE_COUNT = 5;
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<UserProfile | null>(null);
+  const [avatarStyle, setAvatarStyle] = useState(0);
 
   useEffect(() => {
     const p = getProfile();
     if (!p) { navigate('/'); return; }
     setProfile(p);
+    setAvatarStyle((p as any).avatarStyle ?? 0);
   }, [navigate]);
 
   if (!profile) return null;
@@ -40,12 +44,14 @@ export default function ProfilePage() {
   const cancelEdit = () => {
     setDraft(null);
     setEditing(false);
+    setAvatarStyle((profile as any).avatarStyle ?? 0);
   };
 
   const saveEdit = () => {
     if (!draft) return;
-    saveProfile(draft);
-    setProfile(draft);
+    const updated = { ...draft, avatarStyle } as any;
+    saveProfile(updated);
+    setProfile(updated);
     applyGenderTheme();
     setDraft(null);
     setEditing(false);
@@ -57,19 +63,15 @@ export default function ProfilePage() {
 
   const current = editing && draft ? draft : profile;
 
-  const infoItems = [
-    { icon: User, label: 'Age', value: `${current.age} years`, field: 'age' as const },
-    { icon: Ruler, label: 'Height', value: `${current.height} cm`, field: 'height' as const },
-    { icon: Weight, label: 'Weight', value: `${current.weight} kg`, field: 'weight' as const },
-    { icon: Activity, label: 'Activity', value: current.activityLevel, field: 'activityLevel' as const },
-    { icon: Heart, label: 'Medical', value: current.medicalConditions.length ? current.medicalConditions.join(', ') : 'None', field: 'medicalConditions' as const },
-  ];
-
   const handleReset = () => {
     if (window.confirm('This will delete all your data. Are you sure?')) {
       clearAllData();
       navigate('/');
     }
+  };
+
+  const cycleAvatar = (dir: 1 | -1) => {
+    setAvatarStyle(prev => (prev + dir + AVATAR_STYLE_COUNT) % AVATAR_STYLE_COUNT);
   };
 
   return (
@@ -94,8 +96,26 @@ export default function ProfilePage() {
             </div>
           )}
 
-          <div className="w-16 h-16 rounded-full bg-primary-foreground/20 mx-auto mb-3 flex items-center justify-center">
-            <span className="text-2xl font-bold font-display">{current.name.charAt(0)}</span>
+          {/* Avatar */}
+          <div className="relative mx-auto mb-3 w-fit">
+            <PersonalizedAvatar
+              name={current.name}
+              gender={current.gender}
+              size={80}
+              avatarStyle={avatarStyle}
+              className="ring-4 ring-primary-foreground/20"
+            />
+            {editing && (
+              <div className="flex items-center justify-center gap-3 mt-2">
+                <button onClick={() => cycleAvatar(-1)} className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                  <ChevronLeft size={14} />
+                </button>
+                <span className="text-xs opacity-70">Style {avatarStyle + 1}/{AVATAR_STYLE_COUNT}</span>
+                <button onClick={() => cycleAvatar(1)} className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+            )}
           </div>
 
           {editing ? (
@@ -132,144 +152,11 @@ export default function ProfilePage() {
           </div>
         </motion.div>
 
-        {/* Editable Fields */}
+        {/* Editable Fields or Info Cards */}
         {editing ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-            <div className="glass-card rounded-xl p-4 space-y-3">
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Age</Label>
-                  <Input type="number" value={draft?.age || ''} onChange={e => update({ age: parseInt(e.target.value) || 0 })} className="h-10 rounded-xl bg-secondary border-0 text-foreground" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Height (cm)</Label>
-                  <Input type="number" value={draft?.height || ''} onChange={e => update({ height: parseInt(e.target.value) || 0 })} className="h-10 rounded-xl bg-secondary border-0 text-foreground" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Weight (kg)</Label>
-                  <Input type="number" value={draft?.weight || ''} onChange={e => update({ weight: parseInt(e.target.value) || 0 })} className="h-10 rounded-xl bg-secondary border-0 text-foreground" />
-                </div>
-              </div>
-            </div>
-
-            <div className="glass-card rounded-xl p-4 space-y-2">
-              <Label className="text-xs text-muted-foreground">Activity Level</Label>
-              <div className="flex flex-wrap gap-2">
-                {(['sedentary', 'light', 'moderate', 'active', 'very-active'] as const).map(a => (
-                  <button
-                    key={a}
-                    onClick={() => update({ activityLevel: a })}
-                    className={`px-3 h-9 rounded-xl text-xs font-medium transition-all ${
-                      draft?.activityLevel === a ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
-                    }`}
-                  >
-                    {a.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="glass-card rounded-xl p-4 space-y-2">
-              <Label className="text-xs text-muted-foreground">Food Preference</Label>
-              <div className="flex gap-2">
-                {(['vegetarian', 'non-vegetarian'] as const).map(f => (
-                  <button
-                    key={f}
-                    onClick={() => update({ foodPreference: f })}
-                    className={`flex-1 h-9 rounded-xl text-xs font-medium transition-all ${
-                      draft?.foodPreference === f ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
-                    }`}
-                  >
-                    {f.charAt(0).toUpperCase() + f.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="glass-card rounded-xl p-4 space-y-2">
-              <Label className="text-xs text-muted-foreground">Lifestyle</Label>
-              <div className="flex flex-wrap gap-2">
-                {(['student', 'professional', 'sedentary', 'other'] as const).map(l => (
-                  <button
-                    key={l}
-                    onClick={() => update({ lifestyle: l })}
-                    className={`px-3 h-9 rounded-xl text-xs font-medium transition-all ${
-                      draft?.lifestyle === l ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
-                    }`}
-                  >
-                    {l.charAt(0).toUpperCase() + l.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="glass-card rounded-xl p-4 space-y-2">
-              <Label className="text-xs text-muted-foreground">Medical Conditions</Label>
-              <div className="flex flex-wrap gap-2">
-                {medicalOptions.map(m => {
-                  const selected = m === 'None' ? (draft?.medicalConditions?.length === 0) : draft?.medicalConditions?.includes(m);
-                  return (
-                    <button
-                      key={m}
-                      onClick={() => {
-                        if (m === 'None') { update({ medicalConditions: [] }); }
-                        else {
-                          const conditions = draft?.medicalConditions || [];
-                          update({ medicalConditions: conditions.includes(m) ? conditions.filter(c => c !== m) : [...conditions, m] });
-                        }
-                      }}
-                      className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
-                        selected ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
-                      }`}
-                    >
-                      {m}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="glass-card rounded-xl p-4 space-y-2">
-              <Label className="text-xs text-muted-foreground">Skin Type</Label>
-              <div className="flex flex-wrap gap-2">
-                {(['oily', 'dry', 'combination', 'normal', 'sensitive'] as const).map(s => (
-                  <button
-                    key={s}
-                    onClick={() => update({ skinType: s })}
-                    className={`px-3 h-9 rounded-full text-xs font-medium transition-all ${
-                      draft?.skinType === s ? 'gradient-warm text-primary-foreground' : 'bg-secondary text-secondary-foreground'
-                    }`}
-                  >
-                    {s.charAt(0).toUpperCase() + s.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <Button onClick={saveEdit} className="w-full h-12 rounded-xl gradient-warm text-primary-foreground font-semibold border-0">
-              <Check size={16} className="mr-2" /> Save Changes
-            </Button>
-          </motion.div>
+          <ProfileEditForm draft={draft} update={update} onSave={saveEdit} />
         ) : (
-          <>
-            {infoItems.map(({ icon: Icon, label, value }, i) => (
-              <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i }}
-                className="glass-card rounded-xl p-4 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Icon size={18} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">{label}</p>
-                  <p className="text-sm font-medium text-foreground capitalize">{value}</p>
-                </div>
-              </motion.div>
-            ))}
-          </>
+          <ProfileInfoCards profile={profile} />
         )}
 
         <Button
@@ -283,5 +170,38 @@ export default function ProfilePage() {
 
       <BottomNav />
     </div>
+  );
+}
+
+/* ---- Sub-components extracted inline ---- */
+
+function ProfileInfoCards({ profile }: { profile: UserProfile }) {
+  const infoItems = [
+    { icon: Ruler, label: 'Height', value: `${profile.height} cm` },
+    { icon: Weight, label: 'Weight', value: `${profile.weight} kg` },
+    { icon: Activity, label: 'Activity', value: profile.activityLevel },
+    { icon: Heart, label: 'Medical', value: profile.medicalConditions.length ? profile.medicalConditions.join(', ') : 'None' },
+  ];
+
+  return (
+    <>
+      {infoItems.map(({ icon: Icon, label, value }, i) => (
+        <motion.div
+          key={label}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 * i }}
+          className="glass-card rounded-xl p-4 flex items-center gap-3"
+        >
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Icon size={18} className="text-primary" />
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">{label}</p>
+            <p className="text-sm font-medium text-foreground capitalize">{value}</p>
+          </div>
+        </motion.div>
+      ))}
+    </>
   );
 }
