@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell, Music } from 'lucide-react';
+import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell, Music, Target } from 'lucide-react';
 import { getProfile, getTrackerEntries, addTrackerEntry } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
 import { getGenderSpecificTips } from '@/lib/notifications';
+import { getGamificationState } from '@/lib/gamification';
 import MetricCard from '@/components/MetricCard';
 import BottomNav from '@/components/BottomNav';
-import PersonalizedAvatar from '@/components/PersonalizedAvatar';
+import AnimatedAvatar from '@/components/AnimatedAvatar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
