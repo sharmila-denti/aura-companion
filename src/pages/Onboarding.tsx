@@ -33,8 +33,11 @@ export default function Onboarding() {
     return true;
   };
 
-  const finish = () => {
+  const finish = async () => {
     saveProfile(profile as UserProfile);
+    applyGenderTheme();
+    const granted = await requestNotificationPermission();
+    if (granted) startNotificationScheduler();
     navigate('/dashboard');
   };
 
