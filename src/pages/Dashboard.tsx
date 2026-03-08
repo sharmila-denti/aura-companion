@@ -31,6 +31,7 @@ export default function Dashboard() {
   const stepsEntry = todayEntries.find(e => e.type === 'steps');
   const isMale = profile.gender === 'male';
   const tips = getGenderSpecificTips();
+  const gamification = getGamificationState();
 
   const addWater = () => {
     addTrackerEntry({ date: today, type: 'water', value: 1 });
