@@ -7,6 +7,7 @@ import BottomNav from '@/components/BottomNav';
 import { Button } from '@/components/ui/button';
 import { getProfile } from '@/lib/store';
 import { calculateBMI } from '@/lib/types';
+import { supabase } from '@/integrations/supabase/client';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
