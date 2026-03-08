@@ -69,9 +69,6 @@ export default function ProfilePage() {
     }
   };
 
-  const cycleAvatar = (dir: 1 | -1) => {
-    setAvatarStyle(prev => (prev + dir + AVATAR_STYLE_COUNT) % AVATAR_STYLE_COUNT);
-  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
