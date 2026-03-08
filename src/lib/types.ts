@@ -13,6 +13,7 @@ export interface UserProfile {
   hairTexture?: 'straight' | 'wavy' | 'curly' | 'coily';
   hairDensity?: 'thin' | 'medium' | 'thick';
   hairType?: 'oily' | 'dry' | 'normal' | 'combination';
+  language?: 'english' | 'hindi' | 'tamil' | 'telugu' | 'spanish' | 'french' | 'korean' | 'japanese';
 }
 
 export interface BMIResult {
