@@ -40,7 +40,7 @@ export default function MoodMusic() {
       setIsPlaying(false);
       setActiveMood(null);
     } else {
-      engine.play(mood);
+      engine.play(mood, selectedLang);
       engine.setVolume(isMuted ? 0 : volume / 100);
       setActiveMood(mood);
       setIsPlaying(true);
