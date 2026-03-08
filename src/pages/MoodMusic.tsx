@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Volume2, VolumeX, Music } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Music, Globe } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
-import { MoodMusicEngine, moodConfigs, Mood } from '@/lib/moodMusic';
+import { MoodMusicEngine, moodConfigs, languageConfigs, Mood } from '@/lib/moodMusic';
 import { Slider } from '@/components/ui/slider';
-
-const moods: Mood[] = ['sad', 'calm', 'joyful', 'energetic', 'anxious', 'sleepy'];
+import { getProfile } from '@/lib/store';
+import { UserProfile } from '@/lib/types';
 
 export default function MoodMusic() {
   const engineRef = useRef<MoodMusicEngine | null>(null);
