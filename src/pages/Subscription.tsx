@@ -32,23 +32,16 @@ export default function Subscription() {
 
   const UPI_ID = 'sharmiideepii@oksbi';
 
+  const [paymentInitiated, setPaymentInitiated] = useState(false);
+
   const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
     const amount = plan.price.replace('₹', '');
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=HeyMe&am=${amount}&cu=INR&tn=HeyMe+${plan.label}+Subscription`;
     
-    // Try UPI intent
+    // Open UPI app - do NOT auto-activate subscription
     window.location.href = upiUrl;
-    
-    // Save subscription after redirect attempt
-    setTimeout(async () => {
-      try {
-        await saveSubscription(selectedPlan);
-        navigate('/onboarding');
-      } catch {
-        toast({ title: 'Error', description: 'Failed to save subscription', variant: 'destructive' });
-      }
-    }, 3000);
+    setPaymentInitiated(true);
   };
 
   const handleSkip = async () => {
