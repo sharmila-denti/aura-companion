@@ -22,6 +22,7 @@ import MoodMusic from "./pages/MoodMusic";
 import Subscription from "./pages/Subscription";
 import AIAssistant from "./pages/AIAssistant";
 import Diary from "./pages/Diary";
+import DailyTargets from "./pages/DailyTargets";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ function AppContent() {
         <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
         <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
         <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
+        <Route path="/targets" element={<ProtectedRoute><DailyTargets /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

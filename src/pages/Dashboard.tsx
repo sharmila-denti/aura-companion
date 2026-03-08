@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell, Music } from 'lucide-react';
+import { Droplets, Moon, Footprints, Sparkles, Heart, Dumbbell, Utensils, Calendar, Settings, Bell, Music, Target } from 'lucide-react';
 import { getProfile, getTrackerEntries, addTrackerEntry } from '@/lib/store';
 import { UserProfile, calculateBMI } from '@/lib/types';
 import { getGenderSpecificTips } from '@/lib/notifications';
+import { getGamificationState } from '@/lib/gamification';
 import MetricCard from '@/components/MetricCard';
 import BottomNav from '@/components/BottomNav';
-import PersonalizedAvatar from '@/components/PersonalizedAvatar';
+import AnimatedAvatar from '@/components/AnimatedAvatar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function Dashboard() {
   const stepsEntry = todayEntries.find(e => e.type === 'steps');
   const isMale = profile.gender === 'male';
   const tips = getGenderSpecificTips();
+  const gamification = getGamificationState();
 
   const addWater = () => {
     addTrackerEntry({ date: today, type: 'water', value: 1 });
@@ -37,6 +39,7 @@ export default function Dashboard() {
   };
 
   const quickActions = [
+    { icon: Target, label: 'Targets', color: 'hsl(var(--accent))', path: '/targets' },
     { icon: Sparkles, label: isMale ? 'Grooming' : 'Beauty', color: 'hsl(var(--beauty))', path: '/beauty' },
     { icon: Heart, label: 'Health', color: 'hsl(var(--wellness))', path: '/health' },
     { icon: Dumbbell, label: 'Fitness', color: 'hsl(var(--fitness))', path: '/fitness' },
@@ -57,11 +60,15 @@ export default function Dashboard() {
             <h1 className="text-2xl font-bold font-display text-primary-foreground mt-0.5">{profile.name} ✨</h1>
           </div>
           <button onClick={() => navigate('/profile')} className="shrink-0">
-            <PersonalizedAvatar
+            <AnimatedAvatar
               name={profile.name}
               gender={profile.gender}
+              skinTone={profile.skinTone}
+              hairTexture={profile.hairTexture}
+              hairDensity={profile.hairDensity}
               size={48}
               avatarStyle={(profile as any).avatarStyle ?? 0}
+              level={gamification.level}
               className="ring-2 ring-primary-foreground/30"
             />
           </button>

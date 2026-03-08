@@ -4,8 +4,9 @@ import { motion } from 'framer-motion';
 import { Ruler, Weight, Activity, Heart, Trash2, Pencil, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import BottomNav from '@/components/BottomNav';
-import PersonalizedAvatar from '@/components/PersonalizedAvatar';
+import AnimatedAvatar from '@/components/AnimatedAvatar';
 import { getProfile, saveProfile, clearAllData } from '@/lib/store';
+import { getGamificationState } from '@/lib/gamification';
 import { calculateBMI, UserProfile } from '@/lib/types';
 import { applyGenderTheme } from '@/lib/theme';
 import { Button } from '@/components/ui/button';
@@ -98,11 +99,15 @@ export default function ProfilePage() {
 
           {/* Avatar */}
           <div className="relative mx-auto mb-3 w-fit">
-            <PersonalizedAvatar
+            <AnimatedAvatar
               name={current.name}
               gender={current.gender}
+              skinTone={current.skinTone}
+              hairTexture={current.hairTexture}
+              hairDensity={current.hairDensity}
               size={80}
               avatarStyle={avatarStyle}
+              level={getGamificationState().level}
               className="ring-4 ring-primary-foreground/20"
             />
             {editing && (
