@@ -25,7 +25,7 @@ const Index = () => {
           <Sparkles size={36} className="text-primary-foreground" />
         </div>
         <h1 className="text-4xl font-bold font-display text-foreground mb-3">
-          Glow<span className="text-gradient">Up</span>
+          Hey <span className="text-gradient">Me!</span>
         </h1>
         <p className="text-muted-foreground text-base leading-relaxed max-w-xs mx-auto">
           Your all-in-one wellness, beauty, fitness & lifestyle companion
