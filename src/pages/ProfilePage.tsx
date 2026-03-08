@@ -99,11 +99,15 @@ export default function ProfilePage() {
 
           {/* Avatar */}
           <div className="relative mx-auto mb-3 w-fit">
-            <PersonalizedAvatar
+            <AnimatedAvatar
               name={current.name}
               gender={current.gender}
+              skinTone={current.skinTone}
+              hairTexture={current.hairTexture}
+              hairDensity={current.hairDensity}
               size={80}
               avatarStyle={avatarStyle}
+              level={getGamificationState().level}
               className="ring-4 ring-primary-foreground/20"
             />
             {editing && (
