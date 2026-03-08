@@ -6,9 +6,9 @@ import heyMeLogo from '@/assets/heyme-logo.png';
 import upiQr from '@/assets/upi-qr.jpg';
 
 const plans = [
-  { id: 'monthly', label: '1 Month', price: '₹19', period: '/month', savings: '', popular: false },
-  { id: 'half-yearly', label: '6 Months', price: '₹99', period: '/6 months', savings: 'Save 13%', popular: true },
-  { id: 'yearly', label: '1 Year', price: '₹149', period: '/year', savings: 'Save 35%', popular: false },
+  { id: 'monthly', label: '1 Month', price: '₹39', period: '/month', savings: '', popular: false },
+  { id: 'half-yearly', label: '6 Months', price: '₹149', period: '/6 months', savings: 'Save 36%', popular: true },
+  { id: 'yearly', label: '1 Year', price: '₹249', period: '/year', savings: 'Save 47%', popular: false },
 ];
 
 const benefits = [
