@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import BottomNav from '@/components/BottomNav';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 type Message = { role: 'user' | 'assistant'; content: string };
 
