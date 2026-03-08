@@ -25,9 +25,21 @@ export default function Subscription() {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('half-yearly');
 
+  const UPI_ID = 'sharmiideepii@oksbi';
+
   const handleSubscribe = () => {
-    localStorage.setItem('heyme_subscribed', 'true');
-    navigate('/onboarding');
+    const plan = plans.find(p => p.id === selectedPlan)!;
+    const amount = plan.price.replace('₹', '');
+    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=HeyMe&am=${amount}&cu=INR&tn=HeyMe+${plan.label}+Subscription`;
+    
+    // Try UPI intent
+    window.location.href = upiUrl;
+    
+    // Mark as subscribed after redirect attempt
+    setTimeout(() => {
+      localStorage.setItem('heyme_subscribed', 'true');
+      navigate('/onboarding');
+    }, 3000);
   };
 
   const handleSkip = () => {
