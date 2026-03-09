@@ -60,6 +60,34 @@ export default function Subscription() {
     }
   };
 
+  const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: 'File too large', description: 'Max 5MB allowed', variant: 'destructive' });
+      return;
+    }
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      toast({ title: 'Invalid format', description: 'Only JPG, PNG, WEBP allowed', variant: 'destructive' });
+      return;
+    }
+    setScreenshot(file);
+    setScreenshotPreview(URL.createObjectURL(file));
+  };
+
+  const uploadScreenshot = async (): Promise<string | null> => {
+    if (!screenshot || !user) return null;
+    const ext = screenshot.name.split('.').pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from('payment-screenshots').upload(path, screenshot);
+    if (error) {
+      console.error('Upload error:', error);
+      throw new Error('Failed to upload screenshot');
+    }
+    const { data } = supabase.storage.from('payment-screenshots').getPublicUrl(path);
+    return data.publicUrl;
+  };
+
   const handlePaymentConfirmed = async () => {
     const trimmed = transactionId.trim();
     if (!trimmed) {
@@ -72,7 +100,8 @@ export default function Subscription() {
     }
     setSubmitting(true);
     try {
-      await saveSubscription(selectedPlan, trimmed);
+      const screenshotUrl = await uploadScreenshot();
+      await saveSubscription(selectedPlan, trimmed, screenshotUrl || undefined);
       toast({ title: 'Payment submitted!', description: 'Your subscription will be activated after verification.' });
       navigate('/onboarding');
     } catch {
