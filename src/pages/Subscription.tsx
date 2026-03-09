@@ -221,11 +221,19 @@ export default function Subscription() {
             </p>
             <img src={upiQr} alt="UPI QR Code" className="w-56 mx-auto rounded-xl" />
             <p className="text-xs text-muted-foreground mt-3">UPI ID: sharmiideepii@oksbi</p>
+            <Input
+              value={transactionId}
+              onChange={e => setTransactionId(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+              placeholder="Enter UPI Transaction ID"
+              className="mt-3 h-11 rounded-xl text-center text-sm font-mono tracking-wider"
+              maxLength={35}
+            />
             <button
               onClick={handlePaymentConfirmed}
-              className="mt-3 w-full h-10 rounded-xl bg-secondary text-foreground text-sm font-medium"
+              disabled={submitting || !transactionId.trim()}
+              className="mt-2 w-full h-10 rounded-xl bg-secondary text-foreground text-sm font-medium disabled:opacity-50"
             >
-              I've completed the payment →
+              {submitting ? 'Submitting...' : 'Verify & Activate →'}
             </button>
           </motion.div>
         )}
