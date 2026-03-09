@@ -29,9 +29,10 @@ export function useSubscription() {
       if (error) {
         console.error('Error fetching subscription:', error);
         setSubscribed(false);
-      } else if (data && data.status === 'active') {
-        setSubscribed(true);
+      } else if (data) {
+        setSubscribed(data.status === 'active' || data.status === 'pending');
         setPlan(data.plan);
+        setStatus(data.status);
       } else {
         setSubscribed(false);
       }
