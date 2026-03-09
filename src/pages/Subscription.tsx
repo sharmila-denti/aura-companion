@@ -31,7 +31,7 @@ export default function Subscription() {
   const [selectedPlan, setSelectedPlan] = useState('half-yearly');
   const [showQR, setShowQR] = useState(false);
 
-  const UPI_ID = 'sharmiideepii@oksbi';
+  const UPI_ID = '9150106701@axl';
 
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const [transactionId, setTransactionId] = useState('');
@@ -220,7 +220,7 @@ export default function Subscription() {
               Scan to pay <span className="font-bold text-primary">{plans.find(p => p.id === selectedPlan)?.price}</span> for {plans.find(p => p.id === selectedPlan)?.label}
             </p>
             <img src={upiQr} alt="UPI QR Code" className="w-56 mx-auto rounded-xl" />
-            <p className="text-xs text-muted-foreground mt-3">UPI ID: sharmiideepii@oksbi</p>
+            <p className="text-xs text-muted-foreground mt-3">UPI ID: 9150106701@axl</p>
             <Input
               value={transactionId}
               onChange={e => setTransactionId(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
