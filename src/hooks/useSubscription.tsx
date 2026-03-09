@@ -6,12 +6,14 @@ export function useSubscription() {
   const { user } = useAuth();
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [plan, setPlan] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
       setSubscribed(null);
       setPlan(null);
+      setStatus(null);
       setLoading(false);
       return;
     }
@@ -27,9 +29,10 @@ export function useSubscription() {
       if (error) {
         console.error('Error fetching subscription:', error);
         setSubscribed(false);
-      } else if (data && data.status === 'active') {
-        setSubscribed(true);
+      } else if (data) {
+        setSubscribed(data.status === 'active' || data.status === 'pending');
         setPlan(data.plan);
+        setStatus(data.status);
       } else {
         setSubscribed(false);
       }
@@ -82,5 +85,5 @@ export function useSubscription() {
     setPlan('free_trial');
   };
 
-  return { subscribed, plan, loading, saveSubscription, skipSubscription };
+  return { subscribed, plan, status, loading, saveSubscription, skipSubscription };
 }
