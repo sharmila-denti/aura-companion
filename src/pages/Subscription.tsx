@@ -31,7 +31,7 @@ export default function Subscription() {
   const [selectedPlan, setSelectedPlan] = useState('half-yearly');
   const [showQR, setShowQR] = useState(false);
 
-  const UPI_ID = 'sharmiideepii@oksbi';
+  const UPI_ID = '9150106701@axl';
 
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const [transactionId, setTransactionId] = useState('');
