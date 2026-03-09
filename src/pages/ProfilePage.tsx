@@ -153,9 +153,16 @@ export default function ProfilePage() {
           <div className="flex-1">
             <p className="text-sm font-semibold text-foreground">Subscription Plan</p>
             <p className="text-xs text-muted-foreground">
-              {subscribed && plan !== 'free_trial' ? 'Active' : 'Upgrade to Premium'}
+              {subscribed && plan !== 'free_trial' ? `${plan} plan` : 'Upgrade to Premium'}
             </p>
           </div>
+          {subscribed && plan !== 'free_trial' && (
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+              status === 'active' ? 'bg-green-500/15 text-green-600' : 'bg-yellow-500/15 text-yellow-600'
+            }`}>
+              {status === 'active' ? 'Active' : 'Pending'}
+            </span>
+          )}
           <span className="text-xs font-medium text-primary">→</span>
         </motion.button>
 
