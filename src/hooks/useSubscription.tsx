@@ -13,6 +13,7 @@ export function useSubscription() {
     if (!user) {
       setSubscribed(null);
       setPlan(null);
+      setStatus(null);
       setLoading(false);
       return;
     }
