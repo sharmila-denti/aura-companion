@@ -42,7 +42,7 @@ export function useSubscription() {
     fetchSubscription();
   }, [user]);
 
-  const saveSubscription = async (planId: string, transactionId?: string) => {
+  const saveSubscription = async (planId: string, transactionId?: string, screenshotUrl?: string) => {
     if (!user) return;
     const validPlans = ['monthly', 'half-yearly', 'yearly'];
     if (!validPlans.includes(planId)) {
@@ -59,6 +59,7 @@ export function useSubscription() {
           plan: planId,
           status: 'pending',
           transaction_id: transactionId || null,
+          screenshot_url: screenshotUrl || null,
         } as any,
         { onConflict: 'user_id' }
       );

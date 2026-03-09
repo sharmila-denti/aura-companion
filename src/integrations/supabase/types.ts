@@ -121,6 +121,7 @@ export type Database = {
           created_at: string
           id: string
           plan: string
+          screenshot_url: string | null
           status: string
           transaction_id: string | null
           updated_at: string
@@ -130,6 +131,7 @@ export type Database = {
           created_at?: string
           id?: string
           plan?: string
+          screenshot_url?: string | null
           status?: string
           transaction_id?: string | null
           updated_at?: string
@@ -139,6 +141,7 @@ export type Database = {
           created_at?: string
           id?: string
           plan?: string
+          screenshot_url?: string | null
           status?: string
           transaction_id?: string | null
           updated_at?: string

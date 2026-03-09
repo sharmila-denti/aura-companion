@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Crown, Sparkles, Dumbbell, Heart, Scissors, BookOpen, Bot, Calendar, QrCode } from 'lucide-react';
+import { Check, Crown, Sparkles, Dumbbell, Heart, Scissors, BookOpen, Bot, Calendar, QrCode, Upload, Image } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import heyMeLogo from '@/assets/heyme-logo.png';
 import upiQr from '@/assets/upi-qr.jpg';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
 const plans = [
@@ -33,9 +35,13 @@ export default function Subscription() {
 
   const UPI_ID = '9150106701@axl';
 
+  const { user } = useAuth();
+
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const [transactionId, setTransactionId] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
 
   const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
@@ -54,6 +60,34 @@ export default function Subscription() {
     }
   };
 
+  const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: 'File too large', description: 'Max 5MB allowed', variant: 'destructive' });
+      return;
+    }
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      toast({ title: 'Invalid format', description: 'Only JPG, PNG, WEBP allowed', variant: 'destructive' });
+      return;
+    }
+    setScreenshot(file);
+    setScreenshotPreview(URL.createObjectURL(file));
+  };
+
+  const uploadScreenshot = async (): Promise<string | null> => {
+    if (!screenshot || !user) return null;
+    const ext = screenshot.name.split('.').pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from('payment-screenshots').upload(path, screenshot);
+    if (error) {
+      console.error('Upload error:', error);
+      throw new Error('Failed to upload screenshot');
+    }
+    const { data } = supabase.storage.from('payment-screenshots').getPublicUrl(path);
+    return data.publicUrl;
+  };
+
   const handlePaymentConfirmed = async () => {
     const trimmed = transactionId.trim();
     if (!trimmed) {
@@ -66,7 +100,8 @@ export default function Subscription() {
     }
     setSubmitting(true);
     try {
-      await saveSubscription(selectedPlan, trimmed);
+      const screenshotUrl = await uploadScreenshot();
+      await saveSubscription(selectedPlan, trimmed, screenshotUrl || undefined);
       toast({ title: 'Payment submitted!', description: 'Your subscription will be activated after verification.' });
       navigate('/onboarding');
     } catch {
@@ -181,7 +216,7 @@ export default function Subscription() {
           >
             <p className="text-sm font-medium text-foreground">Completed your payment?</p>
             <p className="text-xs text-muted-foreground">
-              Enter your UPI Transaction/Reference ID below to verify your payment.
+              Enter your UPI Transaction/Reference ID and upload a payment screenshot for verification.
             </p>
             <Input
               value={transactionId}
@@ -190,6 +225,19 @@ export default function Subscription() {
               className="h-11 rounded-xl text-center text-sm font-mono tracking-wider"
               maxLength={35}
             />
+            {/* Screenshot Upload */}
+            <label className="flex flex-col items-center gap-2 cursor-pointer border-2 border-dashed border-border rounded-xl p-3 hover:border-primary/50 transition-colors">
+              {screenshotPreview ? (
+                <img src={screenshotPreview} alt="Payment screenshot" className="w-full max-h-40 object-contain rounded-lg" />
+              ) : (
+                <>
+                  <Upload size={20} className="text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Upload payment screenshot</span>
+                </>
+              )}
+              <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleScreenshotChange} />
+              {screenshot && <span className="text-xs text-primary font-medium">{screenshot.name}</span>}
+            </label>
             <button
               onClick={handlePaymentConfirmed}
               disabled={submitting || !transactionId.trim()}
@@ -228,6 +276,19 @@ export default function Subscription() {
               className="mt-3 h-11 rounded-xl text-center text-sm font-mono tracking-wider"
               maxLength={35}
             />
+            {/* Screenshot Upload */}
+            <label className="mt-2 flex flex-col items-center gap-2 cursor-pointer border-2 border-dashed border-border rounded-xl p-3 hover:border-primary/50 transition-colors">
+              {screenshotPreview ? (
+                <img src={screenshotPreview} alt="Payment screenshot" className="w-full max-h-40 object-contain rounded-lg" />
+              ) : (
+                <>
+                  <Upload size={20} className="text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Upload payment screenshot</span>
+                </>
+              )}
+              <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleScreenshotChange} />
+              {screenshot && <span className="text-xs text-primary font-medium">{screenshot.name}</span>}
+            </label>
             <button
               onClick={handlePaymentConfirmed}
               disabled={submitting || !transactionId.trim()}
