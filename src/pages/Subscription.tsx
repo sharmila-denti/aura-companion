@@ -35,9 +35,13 @@ export default function Subscription() {
 
   const UPI_ID = '9150106701@axl';
 
+  const { user } = useAuth();
+
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const [transactionId, setTransactionId] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
 
   const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
