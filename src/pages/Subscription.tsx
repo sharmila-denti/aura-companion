@@ -33,13 +33,13 @@ export default function Subscription() {
   const UPI_ID = 'sharmiideepii@oksbi';
 
   const [paymentInitiated, setPaymentInitiated] = useState(false);
+  const [transactionId, setTransactionId] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
     const amount = plan.price.replace('₹', '');
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=HeyMe&am=${amount}&cu=INR&tn=HeyMe+${plan.label}+Subscription`;
-    
-    // Open UPI app - do NOT auto-activate subscription
     window.location.href = upiUrl;
     setPaymentInitiated(true);
   };
@@ -54,11 +54,24 @@ export default function Subscription() {
   };
 
   const handlePaymentConfirmed = async () => {
+    const trimmed = transactionId.trim();
+    if (!trimmed) {
+      toast({ title: 'Transaction ID required', description: 'Please enter your UPI transaction/reference ID', variant: 'destructive' });
+      return;
+    }
+    if (!/^[a-zA-Z0-9]{8,35}$/.test(trimmed)) {
+      toast({ title: 'Invalid Transaction ID', description: 'Enter a valid 8-35 character alphanumeric transaction ID', variant: 'destructive' });
+      return;
+    }
+    setSubmitting(true);
     try {
-      await saveSubscription(selectedPlan);
+      await saveSubscription(selectedPlan, trimmed);
+      toast({ title: 'Payment submitted!', description: 'Your subscription will be activated after verification.' });
       navigate('/onboarding');
     } catch {
-      toast({ title: 'Error', description: 'Failed to save subscription', variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to save. Please try again.', variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
