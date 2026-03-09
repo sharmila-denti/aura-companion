@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { applyGenderTheme } from "@/lib/theme";
 import { requestNotificationPermission, startNotificationScheduler } from "@/lib/notifications";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
@@ -43,6 +44,26 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function PaidRoute({ children }: { children: React.ReactNode }) {
+  const { subscribed, plan, loading } = useSubscription();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  const hasActiveSubscription = subscribed && plan && plan !== 'free_trial';
+
+  if (!hasActiveSubscription) {
+    return <Navigate to="/subscription" replace />;
+  }
+
+  return <>{children}</>;
+}
+
 function AppContent() {
   useEffect(() => {
     applyGenderTheme();
@@ -57,10 +78,10 @@ function AppContent() {
         <Route path="/" element={<Login />} />
         <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/beauty" element={<ProtectedRoute><BeautyTracker /></ProtectedRoute>} />
+        <Route path="/beauty" element={<ProtectedRoute><PaidRoute><BeautyTracker /></PaidRoute></ProtectedRoute>} />
         <Route path="/health" element={<ProtectedRoute><HealthTracker /></ProtectedRoute>} />
         <Route path="/fitness" element={<ProtectedRoute><FitnessPlanner /></ProtectedRoute>} />
-        <Route path="/diet" element={<ProtectedRoute><DietPlanner /></ProtectedRoute>} />
+        <Route path="/diet" element={<ProtectedRoute><PaidRoute><DietPlanner /></PaidRoute></ProtectedRoute>} />
         <Route path="/cycle" element={<ProtectedRoute><CycleTracker /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
@@ -69,7 +90,7 @@ function AppContent() {
         <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
         <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
         <Route path="/targets" element={<ProtectedRoute><DailyTargets /></ProtectedRoute>} />
-        <Route path="/style" element={<ProtectedRoute><StyleAdvisor /></ProtectedRoute>} />
+        <Route path="/style" element={<ProtectedRoute><PaidRoute><StyleAdvisor /></PaidRoute></ProtectedRoute>} />
         <Route path="/qr-scanner" element={<ProtectedRoute><QRScanner /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
