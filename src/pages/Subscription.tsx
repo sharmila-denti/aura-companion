@@ -177,17 +177,25 @@ export default function Subscription() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card rounded-2xl p-4 text-center"
+            className="glass-card rounded-2xl p-4 text-center space-y-3"
           >
-            <p className="text-sm font-medium text-foreground mb-2">Completed your payment?</p>
-            <p className="text-xs text-muted-foreground mb-3">
-              After payment, tap below to confirm. Your subscription will be verified.
+            <p className="text-sm font-medium text-foreground">Completed your payment?</p>
+            <p className="text-xs text-muted-foreground">
+              Enter your UPI Transaction/Reference ID below to verify your payment.
             </p>
+            <Input
+              value={transactionId}
+              onChange={e => setTransactionId(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+              placeholder="e.g. 412345678901"
+              className="h-11 rounded-xl text-center text-sm font-mono tracking-wider"
+              maxLength={35}
+            />
             <button
               onClick={handlePaymentConfirmed}
-              className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium"
+              disabled={submitting || !transactionId.trim()}
+              className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50"
             >
-              I've completed the payment →
+              {submitting ? 'Submitting...' : 'Verify & Activate →'}
             </button>
           </motion.div>
         )}
