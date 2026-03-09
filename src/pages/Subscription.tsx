@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Crown, Sparkles, Dumbbell, Heart, Scissors, BookOpen, Bot, Calendar, QrCode } from 'lucide-react';
+import { Check, Crown, Sparkles, Dumbbell, Heart, Scissors, BookOpen, Bot, Calendar, QrCode, Upload, Image } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import heyMeLogo from '@/assets/heyme-logo.png';
 import upiQr from '@/assets/upi-qr.jpg';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
 const plans = [
