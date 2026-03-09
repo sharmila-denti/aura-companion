@@ -20,7 +20,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<UserProfile | null>(null);
-  const { subscribed, plan } = useSubscription();
+  const { subscribed, plan, status } = useSubscription();
   
 
   useEffect(() => {

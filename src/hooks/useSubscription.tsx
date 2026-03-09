@@ -85,5 +85,5 @@ export function useSubscription() {
     setPlan('free_trial');
   };
 
-  return { subscribed, plan, loading, saveSubscription, skipSubscription };
+  return { subscribed, plan, status, loading, saveSubscription, skipSubscription };
 }
