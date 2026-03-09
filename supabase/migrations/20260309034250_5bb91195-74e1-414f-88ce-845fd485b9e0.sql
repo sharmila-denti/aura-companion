@@ -1,0 +1,1 @@
+ALTER TABLE public.subscriptions ADD COLUMN transaction_id text DEFAULT NULL;
