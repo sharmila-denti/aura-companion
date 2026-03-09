@@ -39,17 +39,24 @@ export function useSubscription() {
     fetchSubscription();
   }, [user]);
 
-  const saveSubscription = async (planId: string) => {
+  const saveSubscription = async (planId: string, transactionId?: string) => {
     if (!user) return;
-    // Save as pending - requires manual/server-side verification to activate
     const validPlans = ['monthly', 'half-yearly', 'yearly'];
     if (!validPlans.includes(planId)) {
       throw new Error('Invalid plan');
     }
+    if (transactionId && !/^[a-zA-Z0-9]{8,35}$/.test(transactionId)) {
+      throw new Error('Invalid transaction ID format');
+    }
     const { error } = await supabase
       .from('subscriptions')
       .upsert(
-        { user_id: user.id, plan: planId, status: 'pending' },
+        {
+          user_id: user.id,
+          plan: planId,
+          status: 'pending',
+          transaction_id: transactionId || null,
+        } as any,
         { onConflict: 'user_id' }
       );
     if (error) {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Check, Crown, Sparkles, Dumbbell, Heart, Scissors, BookOpen, Bot, Calendar, QrCode } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import heyMeLogo from '@/assets/heyme-logo.png';
 import upiQr from '@/assets/upi-qr.jpg';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -33,13 +34,13 @@ export default function Subscription() {
   const UPI_ID = 'sharmiideepii@oksbi';
 
   const [paymentInitiated, setPaymentInitiated] = useState(false);
+  const [transactionId, setTransactionId] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubscribe = async () => {
     const plan = plans.find(p => p.id === selectedPlan)!;
     const amount = plan.price.replace('₹', '');
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=HeyMe&am=${amount}&cu=INR&tn=HeyMe+${plan.label}+Subscription`;
-    
-    // Open UPI app - do NOT auto-activate subscription
     window.location.href = upiUrl;
     setPaymentInitiated(true);
   };
@@ -54,11 +55,24 @@ export default function Subscription() {
   };
 
   const handlePaymentConfirmed = async () => {
+    const trimmed = transactionId.trim();
+    if (!trimmed) {
+      toast({ title: 'Transaction ID required', description: 'Please enter your UPI transaction/reference ID', variant: 'destructive' });
+      return;
+    }
+    if (!/^[a-zA-Z0-9]{8,35}$/.test(trimmed)) {
+      toast({ title: 'Invalid Transaction ID', description: 'Enter a valid 8-35 character alphanumeric transaction ID', variant: 'destructive' });
+      return;
+    }
+    setSubmitting(true);
     try {
-      await saveSubscription(selectedPlan);
+      await saveSubscription(selectedPlan, trimmed);
+      toast({ title: 'Payment submitted!', description: 'Your subscription will be activated after verification.' });
       navigate('/onboarding');
     } catch {
-      toast({ title: 'Error', description: 'Failed to save subscription', variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to save. Please try again.', variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -163,17 +177,25 @@ export default function Subscription() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card rounded-2xl p-4 text-center"
+            className="glass-card rounded-2xl p-4 text-center space-y-3"
           >
-            <p className="text-sm font-medium text-foreground mb-2">Completed your payment?</p>
-            <p className="text-xs text-muted-foreground mb-3">
-              After payment, tap below to confirm. Your subscription will be verified.
+            <p className="text-sm font-medium text-foreground">Completed your payment?</p>
+            <p className="text-xs text-muted-foreground">
+              Enter your UPI Transaction/Reference ID below to verify your payment.
             </p>
+            <Input
+              value={transactionId}
+              onChange={e => setTransactionId(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+              placeholder="e.g. 412345678901"
+              className="h-11 rounded-xl text-center text-sm font-mono tracking-wider"
+              maxLength={35}
+            />
             <button
               onClick={handlePaymentConfirmed}
-              className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium"
+              disabled={submitting || !transactionId.trim()}
+              className="w-full h-10 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50"
             >
-              I've completed the payment →
+              {submitting ? 'Submitting...' : 'Verify & Activate →'}
             </button>
           </motion.div>
         )}
@@ -199,11 +221,19 @@ export default function Subscription() {
             </p>
             <img src={upiQr} alt="UPI QR Code" className="w-56 mx-auto rounded-xl" />
             <p className="text-xs text-muted-foreground mt-3">UPI ID: sharmiideepii@oksbi</p>
+            <Input
+              value={transactionId}
+              onChange={e => setTransactionId(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+              placeholder="Enter UPI Transaction ID"
+              className="mt-3 h-11 rounded-xl text-center text-sm font-mono tracking-wider"
+              maxLength={35}
+            />
             <button
               onClick={handlePaymentConfirmed}
-              className="mt-3 w-full h-10 rounded-xl bg-secondary text-foreground text-sm font-medium"
+              disabled={submitting || !transactionId.trim()}
+              className="mt-2 w-full h-10 rounded-xl bg-secondary text-foreground text-sm font-medium disabled:opacity-50"
             >
-              I've completed the payment →
+              {submitting ? 'Submitting...' : 'Verify & Activate →'}
             </button>
           </motion.div>
         )}
