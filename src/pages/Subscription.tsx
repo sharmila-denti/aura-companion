@@ -276,6 +276,19 @@ export default function Subscription() {
               className="mt-3 h-11 rounded-xl text-center text-sm font-mono tracking-wider"
               maxLength={35}
             />
+            {/* Screenshot Upload */}
+            <label className="mt-2 flex flex-col items-center gap-2 cursor-pointer border-2 border-dashed border-border rounded-xl p-3 hover:border-primary/50 transition-colors">
+              {screenshotPreview ? (
+                <img src={screenshotPreview} alt="Payment screenshot" className="w-full max-h-40 object-contain rounded-lg" />
+              ) : (
+                <>
+                  <Upload size={20} className="text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Upload payment screenshot</span>
+                </>
+              )}
+              <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleScreenshotChange} />
+              {screenshot && <span className="text-xs text-primary font-medium">{screenshot.name}</span>}
+            </label>
             <button
               onClick={handlePaymentConfirmed}
               disabled={submitting || !transactionId.trim()}
