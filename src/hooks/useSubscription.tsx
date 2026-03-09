@@ -6,6 +6,7 @@ export function useSubscription() {
   const { user } = useAuth();
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [plan, setPlan] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
